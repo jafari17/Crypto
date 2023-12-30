@@ -24,6 +24,9 @@
                         <td>@item.DateRegisterTime</td>
                         <td>@item.price</td>
                         <td>@item.LastTouchPrice</td>
+                        <td>
+                            <a asp-action="RemovePrice" asp-route-price="@item.price">حذف</a>
+                        </td>
                     </tr>
                 }
             }

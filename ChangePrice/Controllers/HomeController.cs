@@ -5,6 +5,8 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using static System.Net.Mime.MediaTypeNames;
+
 namespace ChangePrice.Controllers
 {
     public class HomeController : Controller
@@ -70,6 +72,54 @@ namespace ChangePrice.Controllers
 
             return Redirect("/");
         }
+
+        public IActionResult RemovePrice(decimal price)
+        {
+            ReadWriteContext _RWContext = new ReadWriteContext();
+            string txt = _RWContext.ReadFile();
+
+            try
+            {
+                List<RegisterPrice> registerPriceList = JsonConvert.DeserializeObject<List<RegisterPrice>>(txt);
+
+                List<RegisterPrice> registerPriceListNew = JsonConvert.DeserializeObject<List<RegisterPrice>>("[]");
+
+                foreach (var rp in registerPriceList)
+                {
+                    if (rp.price != price)
+                    {
+                        registerPriceListNew.Add(rp);
+
+                    }
+                }
+
+                string jsonString = JsonSerializer.Serialize(registerPriceListNew);
+                _RWContext.WriteFile(jsonString);
+
+                return Redirect("/");
+            }
+            catch
+            {
+                Console.WriteLine("Json Convert Error");
+            }
+
+
+
+            //var orderDetail = _context.OrderDetails.Find(id);
+            //_context.Remove(orderDetail);
+            //_context.SaveChanges();
+
+            return Redirect("/");
+        }
+
+
+
+
+
+
+
+
+
 
         public IActionResult Privacy()
         {

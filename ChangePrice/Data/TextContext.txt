@@ -1,2 +1,2 @@
-[{"DateRegisterTime":"2023-12-30T13:14:20.0175061+03:30","price":42000,"Description":"42","LastTouchPrice":null}]
+[{"DateRegisterTime":"2023-12-30T13:14:20.0175061+03:30","price":42000,"Description":"42","LastTouchPrice":null},{"DateRegisterTime":"2023-12-30T14:01:41.7240457+03:30","price":44343535,"Description":"hhhhhhhhsfsfsfs","LastTouchPrice":null}]
 
