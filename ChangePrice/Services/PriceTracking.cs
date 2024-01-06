@@ -12,7 +12,7 @@ namespace ChangePrice.Services
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
         private readonly ILogger _logger;
-        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail,ILogger logger)
+        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail,ILogger<PriceTracking> logger)
         {
             _priceRepository = priceRepository;
             _exchangeProvider = exchangeProvider;
@@ -31,11 +31,11 @@ namespace ChangePrice.Services
             {
                 ItemRP.PriceDifference = ItemRP.price - Candel.ClosePrice;
 
-                if (ItemRP.IsActive == true && ItemRP.IsNotification == true &&
+                if (ItemRP.IsActive == true && ItemRP.IsNotification == false &&
                     DosePriceConditionMeet(ItemRP.price, Candel.HighPrice, Candel.LowPrice))
                     
                 {
-                    ItemRP.IsNotification = false;
+                    
                     ItemRP.LastTouchPrice = DateTime.Now;
 
 
@@ -44,7 +44,7 @@ namespace ChangePrice.Services
                         ItemRP.TouchDirection = "+";
 
                         EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
-                        _notificationEmail.Send(emailModel);
+                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
 
                         _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }
@@ -55,7 +55,7 @@ namespace ChangePrice.Services
 
 
                         EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
-                        _notificationEmail.Send(emailModel);
+                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
 
                         _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }

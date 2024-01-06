@@ -16,7 +16,7 @@ namespace ChangePrice.Repository
 
         private readonly ILogger _logger;
 
-        public PriceJsonFileRepository(IWebHostEnvironment environment, IConfiguration configuration, ILogger logger)
+        public PriceJsonFileRepository(IWebHostEnvironment environment, IConfiguration configuration, ILogger<PriceJsonFileRepository> logger)
         {
             _environment = environment;
             _logger = logger;

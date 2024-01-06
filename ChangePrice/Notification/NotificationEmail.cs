@@ -16,7 +16,7 @@ namespace ChangePrice.Notification
 
 
         private readonly ILogger _logger;
-        public NotificationEmail(IConfiguration configuration, ILogger logger)
+        public NotificationEmail(IConfiguration configuration, ILogger<NotificationEmail> logger)
         {
             _configuration = configuration;
             _logger = logger;
@@ -30,7 +30,7 @@ namespace ChangePrice.Notification
 
 
         }
-        public void Send(EmailModel emailModel)
+        public bool Send(EmailModel emailModel)
         {
 
             MailMessage message = new MailMessage();
@@ -51,12 +51,16 @@ namespace ChangePrice.Notification
                 client.Send(message);
                 //Console.WriteLine("Email sent successfully!");
                 _logger.LogInformation("Email sent successfully!");
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error sending email: {0}", ex.Message);
                 _logger.LogError("Error sending email: {0}", ex.Message);
+                return false;
             }
+
+            return true;
 
         }
 

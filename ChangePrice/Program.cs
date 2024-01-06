@@ -11,6 +11,7 @@ builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
 builder.Services.AddScoped<IPriceTracking, PriceTracking>();
 builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
 
+builder.Services.AddLogging();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

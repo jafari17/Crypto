@@ -4,7 +4,7 @@ namespace ChangePrice.Notification
 {
     public interface INotificationEmail
     {
-        void Send(EmailModel emailModel);
+        bool Send(EmailModel emailModel);
         
     }
 }

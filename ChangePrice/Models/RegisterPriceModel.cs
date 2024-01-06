@@ -10,6 +10,6 @@
         public string TouchDirection { get; set; }  
         public decimal PriceDifference { get; set; }
         public  bool IsNotification { get; set; } = true;
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } = false;
     }
 }
