@@ -14,9 +14,12 @@ namespace ChangePrice.Notification
         private readonly string _SmtpClient;
         private readonly int _port;
 
-        public NotificationEmail(IConfiguration configuration)
+
+        private readonly ILogger _logger;
+        public NotificationEmail(IConfiguration configuration, ILogger logger)
         {
             _configuration = configuration;
+            _logger = logger;
 
 
             _FromEmailAddress = _configuration.GetValue<string>("EmailConfig:FromEmailAddress");
@@ -46,11 +49,13 @@ namespace ChangePrice.Notification
             try
             {
                 client.Send(message);
-                Console.WriteLine("Email sent successfully!");
+                //Console.WriteLine("Email sent successfully!");
+                _logger.LogInformation("Email sent successfully!");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error sending email: {0}", ex.Message);
+                _logger.LogError("Error sending email: {0}", ex.Message);
             }
 
         }

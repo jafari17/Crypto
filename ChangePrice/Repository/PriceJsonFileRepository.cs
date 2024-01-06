@@ -9,14 +9,28 @@ namespace ChangePrice.Repository
     public class PriceJsonFileRepository : IPriceRepository
     {
         private IWebHostEnvironment _environment;
-        public PriceJsonFileRepository(IWebHostEnvironment environment)
+
+        private readonly IConfiguration _configuration;
+        private readonly string _Directory;
+        private readonly string _File;
+
+        private readonly ILogger _logger;
+
+        public PriceJsonFileRepository(IWebHostEnvironment environment, IConfiguration configuration, ILogger logger)
         {
             _environment = environment;
+            _logger = logger;
+
+            _configuration = configuration;
+            _Directory = _configuration.GetValue<string>("DataPath:Directory");
+            _File = _configuration.GetValue<string>("DataPath:File");
+
+
         }
         private string GetFilePath()
         {
             string serverPath = _environment.WebRootPath;
-            var path = Path.Combine(serverPath, "Data", "TextContext.txt");
+            var path = Path.Combine(serverPath, _Directory, _File);
             return path;
         }
 
@@ -49,10 +63,13 @@ namespace ChangePrice.Repository
                 {
                     All = "[]";
                 }
+
+                _logger.LogInformation("GetList successfully!");
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
+                _logger.LogError("Exception: " + e.Message);
             }
 
 
@@ -64,10 +81,13 @@ namespace ChangePrice.Repository
             {
                 registerPriceList = JsonConvert.DeserializeObject<List<RegisterPriceModel>>(All);
                 return registerPriceList;
+
+                _logger.LogInformation("registerPriceList successfully!");
             }
-            catch
+            catch (Exception e)
             {
                 Console.WriteLine("Json Convert Error");
+                _logger.LogError("Exception: " + e.Message);
             }
 
             return registerPriceList;
@@ -101,10 +121,13 @@ namespace ChangePrice.Repository
                 sw.WriteLine("");
                 //Close the file
                 sw.Close();
+
+                _logger.LogInformation(" Add RegisterPrice successfully!");
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
+                _logger.LogError("Exception: " + e.Message);
             }
         }
     }

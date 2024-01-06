@@ -1,4 +1,5 @@
-﻿using ChangePrice.Models;
+﻿using ChangePrice.Controllers;
+using ChangePrice.Models;
 using ChangePrice.Notification;
 using ChangePrice.Repository;
 
@@ -10,11 +11,13 @@ namespace ChangePrice.Services
         private IPriceRepository _priceRepository;
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
-        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail)
+        private readonly ILogger _logger;
+        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail,ILogger logger)
         {
             _priceRepository = priceRepository;
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
+            _logger = logger;
         }
 
 
@@ -43,7 +46,7 @@ namespace ChangePrice.Services
                         EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
                         _notificationEmail.Send(emailModel);
 
-                        Console.WriteLine("+");
+                        _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }
 
                     if (IsCrossedDown(ItemRP.price, Candel.OpenPrice))
@@ -54,7 +57,7 @@ namespace ChangePrice.Services
                         EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
                         _notificationEmail.Send(emailModel);
 
-                        Console.WriteLine("-");
+                        _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }
                 }
             }
