@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RegisterPrice>
+﻿@model IEnumerable<RegisterPriceModel>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -10,9 +10,10 @@
     <table class="table">
         <thead>
         <tr>
-                <th scope="col">DateRegisterTime</th>
+                <th scope="col">Date RegisterTime</th>
                 <th scope="col">price</th>
-                <th scope="col">LastTouchPrice</th>
+                <th scope="col">Price Difference</th>
+                <th scope="col">Last TouchPrice</th>
                 <th scope="col"></th>
         </tr>
         </thead>
@@ -24,9 +25,10 @@
                     <tr>
                         <td>@item.DateRegisterTime</td>
                         <td>@item.price</td>
-                        <td>@item.LastTouchPrice</td>
+                        <td>@item.PriceDifference</td>
+                        <td>@item.LastTouchPrice  @item.TouchDirection</td>
                         <td>
-                            <a asp-action="RemovePrice" asp-route-price="@item.price">Delete</a>
+                            <a asp-action="RemovePrice" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

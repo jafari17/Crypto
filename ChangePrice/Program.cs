@@ -1,7 +1,15 @@
+using ChangePrice.Notification;
+using ChangePrice.Repository;
+using ChangePrice.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
+builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
+builder.Services.AddScoped<IPriceTracking, PriceTracking>();
+builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
 
 var app = builder.Build();
 

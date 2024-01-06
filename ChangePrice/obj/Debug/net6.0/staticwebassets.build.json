@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IjDEOcQ1++TMe0qY0qIBLdZBNgiIjK1eqVz7jUrKHO0=",
+  "Hash": "scfHfirv1yNrznUbaRSUnrHsJXp5qvg8PPiXP4nN67E=",
   "Source": "ChangePrice",
   "BasePath": "_content/ChangePrice",
   "Mode": "Default",
@@ -66,6 +66,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\wwwroot\\Data\\TextContext.txt",
+      "SourceId": "ChangePrice",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\wwwroot\\",
+      "BasePath": "_content/ChangePrice",
+      "RelativePath": "Data/TextContext.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Data\\TextContext.txt"
     },
     {
       "Identity": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\wwwroot\\favicon.ico",

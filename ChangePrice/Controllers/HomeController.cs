@@ -1,125 +1,90 @@
-﻿using ChangePrice.Data;
-using ChangePrice.Models;
+﻿using ChangePrice.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using System.Text.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-using static System.Net.Mime.MediaTypeNames;
+using ChangePrice.Repository;
+using ChangePrice.Services;
 
 namespace ChangePrice.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private ReadWriteContext _RWContext;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IPriceRepository _priceRepository;
+        private IPriceTracking _priceTracking;
+        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking )
         {
             _logger = logger;
-            //_RWContext = RWContext;
+            _priceRepository = priceRepository;
+            _priceTracking = priceTracking;
         }
 
         public IActionResult Index()
         {
-            ReadWriteContext _RWContext = new ReadWriteContext();
-            string txt = _RWContext.ReadFile();
+            _priceTracking.TrackPriceListChanges();
 
-            try
-            {
-                List<RegisterPrice> registerPriceList = JsonConvert.DeserializeObject<List<RegisterPrice>>(txt);
-                return View(registerPriceList);
-            }
-            catch
-            {
-                Console.WriteLine("Json Convert Error");
-            }
+            List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
 
-            return View();
+            return View(AllPrice);
         }
 
+        
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(RegisterPrice registerPrice)
+        public IActionResult Add(RegisterPriceModel registerPriceModel)
         {
 
             //if (!ModelState.IsValid)
             //{
-            //    return View(registerPrice);
+            //    return View(registerPriceModel);
             //}
 
-            RegisterPrice rp = new RegisterPrice()
+            RegisterPriceModel rpNew = new RegisterPriceModel()
             {
+                Id = Guid.NewGuid(),
                 DateRegisterTime = DateTime.Now,
-                price = registerPrice.price,
-                Description = registerPrice.Description,
-                LastTouchPrice = registerPrice.LastTouchPrice,
+                price = registerPriceModel.price,
+                Description = registerPriceModel.Description,
+                LastTouchPrice = registerPriceModel.LastTouchPrice,
             };
-            ReadWriteContext _RWContext = new ReadWriteContext();
-
-            string txt = _RWContext.ReadFile();
-            List<RegisterPrice> registerPriceList = JsonConvert.DeserializeObject<List<RegisterPrice>>(txt);
 
 
-            registerPriceList.Add(rp);
-
-            string jsonString = JsonSerializer.Serialize(registerPriceList);
-            _RWContext.WriteFile(jsonString);
+            List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
+            AllPrice.Add(rpNew);
+            _priceRepository.Add(AllPrice);
 
             return Redirect("/");
         }
 
-        public IActionResult RemovePrice(decimal price)
+        public IActionResult RemovePrice(Guid id)
         {
-            ReadWriteContext _RWContext = new ReadWriteContext();
-            string txt = _RWContext.ReadFile();
-
             try
             {
-                List<RegisterPrice> registerPriceList = JsonConvert.DeserializeObject<List<RegisterPrice>>(txt);
+                List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
 
-                List<RegisterPrice> registerPriceListNew = JsonConvert.DeserializeObject<List<RegisterPrice>>("[]");
-
-                foreach (var rp in registerPriceList)
+                var item = AllPrice.FirstOrDefault(p => p.Id == id);
+                if (item != null)
                 {
-                    if (rp.price != price)
-                    {
-                        registerPriceListNew.Add(rp);
-
-                    }
+                    AllPrice.Remove(item);
                 }
 
-                string jsonString = JsonSerializer.Serialize(registerPriceListNew);
-                _RWContext.WriteFile(jsonString);
+
+                _priceRepository.Add(AllPrice);
 
                 return Redirect("/");
             }
             catch
             {
-                Console.WriteLine("Json Convert Error");
+                Console.WriteLine("Remove Price Error");
             }
-
-
-
-            //var orderDetail = _context.OrderDetails.Find(id);
-            //_context.Remove(orderDetail);
-            //_context.SaveChanges();
 
             return Redirect("/");
         }
 
-
-
-
-
-
-
-
-
+        
 
         public IActionResult Privacy()
         {

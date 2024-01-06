@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\ChangePrice.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\wwwroot\\Data\\TextContext.txt",
+      "PackagePath": "staticwebassets\\Data\\TextContext.txt"
+    },
+    {
       "Id": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
