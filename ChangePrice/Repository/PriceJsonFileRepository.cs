@@ -12,7 +12,7 @@ namespace ChangePrice.Repository
 
         private readonly IConfiguration _configuration;
         private readonly string _Directory;
-        private readonly string _File;
+        private readonly string _JsonFile;
 
         private readonly ILogger _logger;
 
@@ -23,14 +23,14 @@ namespace ChangePrice.Repository
 
             _configuration = configuration;
             _Directory = _configuration.GetValue<string>("DataPath:Directory");
-            _File = _configuration.GetValue<string>("DataPath:File");
+            _JsonFile = _configuration.GetValue<string>("DataPath:JsonFile");
 
 
         }
         private string GetFilePath()
         {
             string serverPath = _environment.WebRootPath;
-            var path = Path.Combine(serverPath, _Directory, _File);
+            var path = Path.Combine(serverPath, _Directory, _JsonFile);
             return path;
         }
 
