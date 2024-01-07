@@ -8,6 +8,12 @@
             {
                 throw new Exception("to address is null or Empty");
             }
+
+            if (string.IsNullOrEmpty(subject))
+            {
+                throw new Exception("Subject is null or Empty");
+            }
+
             ToAddress = toAddress;
             Subject = subject;
             Body = body;

@@ -6,7 +6,7 @@
 
 <div class="text-center">
     <h1 class="display-4">لیست قیمت های ثبتی</h1>
-
+    <br/>
     <table class="table">
         <thead>
         <tr>
@@ -25,8 +25,21 @@
                     <tr>
                         <td>@item.DateRegisterTime</td>
                         <td>@item.price</td>
+                        
                         <td>@item.PriceDifference</td>
-                        <td>@item.LastTouchPrice  @item.TouchDirection</td>
+                        
+@*                     @item.LastTouchPrice != DateTime.MinValue ? <td>@item.LastTouchPrice @item.TouchDirection</td> : <td>-</td>*@
+
+                        
+
+                        @if (item.LastTouchPrice != DateTime.MinValue)
+                        {
+                            <td>@item.LastTouchPrice  @item.TouchDirection</td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
                         <td>
                             <a asp-action="RemovePrice" asp-route-id="@item.Id">Delete</a>
                         </td>

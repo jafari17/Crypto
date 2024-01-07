@@ -12,7 +12,7 @@ namespace ChangePrice.Services
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
         private readonly ILogger _logger;
-        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail,ILogger<PriceTracking> logger)
+        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, ILogger<PriceTracking> logger)
         {
             _priceRepository = priceRepository;
             _exchangeProvider = exchangeProvider;
@@ -26,16 +26,16 @@ namespace ChangePrice.Services
             List<RegisterPriceModel> ListRP = _priceRepository.GetList();
 
             CandlestickModel Candel = _exchangeProvider.GetLastCandle();
-            
+
             foreach (var ItemRP in ListRP)
             {
                 ItemRP.PriceDifference = ItemRP.price - Candel.ClosePrice;
 
                 if (ItemRP.IsActive == true && ItemRP.IsNotification == false &&
                     DosePriceConditionMeet(ItemRP.price, Candel.HighPrice, Candel.LowPrice))
-                    
+
                 {
-                    
+
                     ItemRP.LastTouchPrice = DateTime.Now;
 
 
@@ -43,8 +43,17 @@ namespace ChangePrice.Services
                     {
                         ItemRP.TouchDirection = "+";
 
-                        EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
-                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+                        EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
+                                                lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
+
+                        //ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+                        
+
+
+                        ///////////////////////////////////////////////////////////////////////////////
+                        ItemRP.IsNotification = true;
+                        _logger.LogWarning($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
+                        ////////////////////////////////////////////////////////////////////////
 
                         _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }
@@ -54,8 +63,17 @@ namespace ChangePrice.Services
                         ItemRP.TouchDirection = "-";
 
 
-                        EmailModel emailModel = CreatEmailModel(ItemRP.price, ItemRP.LastTouchPrice, ItemRP.TouchDirection);
-                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+                        EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
+                                                lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
+
+                        //ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+
+
+                        //////////////////////////////////////////////////////////////////////////////////////
+                        _logger.LogWarning($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
+                        ItemRP.IsNotification= true;
+
+                        ////////////////////////////////////////////////////////////////////////////////////////
 
                         _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
                     }
@@ -65,7 +83,6 @@ namespace ChangePrice.Services
             _priceRepository.Add(ListRP);
         }
         bool DosePriceConditionMeet(decimal price, decimal HighPrice, decimal LowPrice)
-
         {
             return price <= HighPrice && price >= LowPrice;
         }
@@ -79,10 +96,10 @@ namespace ChangePrice.Services
             return price <= openPrice;
         }
 
-        EmailModel CreatEmailModel(decimal price, DateTime lastTouchPrice, string touchDirection )
+        EmailModel CreatEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection)
         {
 
-            string ToAddres = "jafari17@gmail.com";
+            string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
             string Body = $"Touch Price {price} in datetime {lastTouchPrice} {touchDirection}";
 

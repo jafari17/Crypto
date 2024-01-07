@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ChangePrice.Repository;
 using ChangePrice.Services;
+using System.Net.Mail;
 
 namespace ChangePrice.Controllers
 {
@@ -11,23 +12,24 @@ namespace ChangePrice.Controllers
         private readonly ILogger<HomeController> _logger;
         private IPriceRepository _priceRepository;
         private IPriceTracking _priceTracking;
-        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking )
+        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking)
         {
             _logger = logger;
             _priceRepository = priceRepository;
+            _priceTracking = priceTracking;
             _priceTracking = priceTracking;
         }
 
         public IActionResult Index()
         {
-            _priceTracking.TrackPriceListChanges();
+            //_priceTracking.TrackPriceListChanges();
 
             List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
 
             return View(AllPrice);
         }
 
-        
+
         public IActionResult Add()
         {
             return View();
@@ -37,16 +39,19 @@ namespace ChangePrice.Controllers
         public IActionResult Add(RegisterPriceModel registerPriceModel)
         {
 
-            //if (!ModelState.IsValid)
+            //decimal price;
+            //if (decimal.TryParse(registerPriceModel.price)
             //{
-            //    return View(registerPriceModel);
+            //    return Redirect("/");
             //}
+
 
             RegisterPriceModel rpNew = new RegisterPriceModel()
             {
                 Id = Guid.NewGuid(),
                 DateRegisterTime = DateTime.Now,
                 price = registerPriceModel.price,
+                EmailAddress = registerPriceModel.EmailAddress,
                 Description = registerPriceModel.Description,
                 LastTouchPrice = registerPriceModel.LastTouchPrice,
             };
@@ -84,7 +89,7 @@ namespace ChangePrice.Controllers
             return Redirect("/");
         }
 
-        
+
 
         public IActionResult Privacy()
         {
