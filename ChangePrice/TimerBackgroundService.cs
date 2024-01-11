@@ -11,17 +11,24 @@ namespace ChangePrice
     {
         private Timer? _timer = null;
 
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly int _TimeSpanSeconds;
 
-        public TimerBackgroundService(IServiceScopeFactory scopeFactory)
+
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
+        public TimerBackgroundService(IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             _scopeFactory = scopeFactory;
+            _configuration = configuration;
+
+            _TimeSpanSeconds = _configuration.GetValue<int>("BackgroundService:TimeSpanSeconds");
+
         }
 
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(_TimeSpanSeconds));
         }
 
         private void DoWork(object? state)
@@ -33,7 +40,6 @@ namespace ChangePrice
                 Console.WriteLine(DateTime.Now);
 
             }
-
         }
     }
 }

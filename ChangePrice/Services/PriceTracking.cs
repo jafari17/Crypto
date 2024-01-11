@@ -41,13 +41,13 @@ namespace ChangePrice.Services
 
                     if (IsCrossedUp(ItemRP.price, Candel.OpenPrice))  // is crossed up
                     {
-                        ItemRP.TouchDirection = "+";
+                        ItemRP.TouchDirection = "Up";
 
                         EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
                                                 lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
 
-                        //ItemRP.IsNotification = _notificationEmail.Send(emailModel);
-                        
+                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+
 
 
                         ///////////////////////////////////////////////////////////////////////////////
@@ -60,13 +60,13 @@ namespace ChangePrice.Services
 
                     if (IsCrossedDown(ItemRP.price, Candel.OpenPrice))
                     {
-                        ItemRP.TouchDirection = "-";
+                        ItemRP.TouchDirection = "Down";
 
 
                         EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
                                                 lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
 
-                        //ItemRP.IsNotification = _notificationEmail.Send(emailModel);
+                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
 
 
                         //////////////////////////////////////////////////////////////////////////////////////

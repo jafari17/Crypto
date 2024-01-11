@@ -10,6 +10,7 @@ namespace ChangePrice.Notification
         private readonly IConfiguration _configuration;
 
         private readonly string _FromEmailAddress;
+        private readonly string _FromEmailAddress2;
         private readonly string _Password;
         private readonly string _SmtpClient;
         private readonly int _port;
@@ -23,6 +24,9 @@ namespace ChangePrice.Notification
 
 
             _FromEmailAddress = _configuration.GetValue<string>("EmailConfig:FromEmailAddress");
+
+            _FromEmailAddress2 = _configuration.GetValue<string>("EmailConfig:FromEmailAddress2");
+
             _Password = _configuration.GetValue<string>("EmailConfig:Password");
             _SmtpClient = _configuration.GetValue<string>("EmailConfig:SmtpClient");
 
@@ -55,14 +59,25 @@ namespace ChangePrice.Notification
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error sending email: {0}", ex.Message);
-                _logger.LogError("Error sending email: {0}", ex.Message);
-                return false;
+                Console.WriteLine("Error sending email 1: {0}", ex.Message);
+                _logger.LogError("Error sending email 1: {0}", ex.Message);
+
+                try
+                {
+                    message.From = new MailAddress(_FromEmailAddress2);
+                    client.Send(message);
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error sending email 2: {0}", ex.Message);
+                    _logger.LogError("Error sending email 2: {0}", ex.Message);
+                    return false;
+                }
+
             }
-
             return true;
-
         }
-
     }
 }

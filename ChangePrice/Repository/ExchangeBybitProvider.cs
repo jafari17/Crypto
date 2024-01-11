@@ -12,7 +12,7 @@ using System.Net.Mail;
 
 namespace ChangePrice.Repository
 {
-    public class ExchangeBinanceProvider : IExchangeProvider
+    public class ExchangeBybitProvider : IExchangeProvider
     {
         private CandlestickModel _candlestickModel;
 
@@ -22,7 +22,7 @@ namespace ChangePrice.Repository
         private readonly string _interval;
         private readonly int _limit;
 
-        public ExchangeBinanceProvider(CandlestickModel candlestickModel, IConfiguration configuration)
+        public ExchangeBybitProvider(CandlestickModel candlestickModel, IConfiguration configuration)
         {
             _candlestickModel = candlestickModel;
             _configuration = configuration;
@@ -42,18 +42,27 @@ namespace ChangePrice.Repository
                 //int limit = 2;
 
                 var client = new HttpClient();
-                var requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
+                var requestUri = $"https://api.bybit.com/v5/market/kline?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
                 var response = client.GetStringAsync(requestUri).Result;
 
-                var data = JsonConvert.DeserializeObject<string[][]>(response);
+                Console.WriteLine(response);
+
+
+                //var data = JsonConvert.DeserializeObject<string[][]>(response);
+                dynamic data = JsonConvert.DeserializeObject(response);
 
                 decimal HighLastCandel = 0;
-                decimal LowLastCandel=0;
+                decimal LowLastCandel = 0;
+
+                dynamic data2 = data.result.list;
+
+                dynamic data3 = JsonConvert.DeserializeObject(data2);
 
 
-                Console.WriteLine(data);
 
-                foreach (var item in data)
+                Console.WriteLine(data3);
+
+                foreach (var item in data.result.list)
                 {
                     //_candlestickModel.OpenTime = Convert.ToInt64(item[0]);
 
@@ -93,7 +102,8 @@ namespace ChangePrice.Repository
             throw new NotImplementedException();
         }
 
-        
+
     }
 }
 
+//https://open-api.bingx.com/openApi/swap/v3/quote/klines?symbol=
