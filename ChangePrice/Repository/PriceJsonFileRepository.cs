@@ -80,9 +80,10 @@ namespace ChangePrice.Repository
             try
             {
                 registerPriceList = JsonConvert.DeserializeObject<List<AlertModel>>(All);
+                _logger.LogInformation("registerPriceList successfully!");
                 return registerPriceList;
 
-                _logger.LogInformation("registerPriceList successfully!");
+                
             }
             catch (Exception e)
             {

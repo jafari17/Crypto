@@ -9,12 +9,14 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Net;
 using System.Net.Mail;
+using ChangePrice.Services;
 
 namespace ChangePrice.Repository
 {
     public class ExchangeBinanceProvider : IExchangeProvider
     {
-        private CandlestickModel _candlestickModel;
+        private IGenerateCandle _generateCandle;
+
 
         private readonly IConfiguration _configuration;
 
@@ -22,9 +24,9 @@ namespace ChangePrice.Repository
         private readonly string _interval;
         private readonly int _limit;
 
-        public ExchangeBinanceProvider(CandlestickModel candlestickModel, IConfiguration configuration)
+        public ExchangeBinanceProvider(IGenerateCandle generateCandle, IConfiguration configuration)
         {
-            _candlestickModel = candlestickModel;
+            _generateCandle = generateCandle;
             _configuration = configuration;
 
             _tradingPair = _configuration.GetValue<string>("CandlestickRequest:tradingPair");
@@ -34,7 +36,7 @@ namespace ChangePrice.Repository
         }
         public CandlestickModel GetLastCandle()
         {
-            //CandlestickModel candlestickModel = new CandlestickModel();
+            var lastCandle = new CandlestickModel();
             try
             {
                 //string tradingPair = "BTCUSDT";
@@ -45,39 +47,9 @@ namespace ChangePrice.Repository
                 var requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
                 var response = client.GetStringAsync(requestUri).Result;
 
-                var data = JsonConvert.DeserializeObject<string[][]>(response);
+                lastCandle = _generateCandle.ResponseToCustomLastCandle(response);
 
-                decimal HighLastCandel = 0;
-                decimal LowLastCandel=0;
-
-
-                Console.WriteLine(data);
-
-                foreach (var item in data)
-                {
-                    //_candlestickModel.OpenTime = Convert.ToInt64(item[0]);
-
-                    _candlestickModel.HighPrice = Math.Max(HighLastCandel, decimal.Parse(item[2]));
-                    _candlestickModel.LowPrice = Math.Min(LowLastCandel, decimal.Parse(item[3]));
-                    _candlestickModel.ClosePrice = decimal.Parse(item[4]);
-
-                    //_candlestickModel.Volume = decimal.Parse(item[5], CultureInfo.InvariantCulture);
-                    //_candlestickModel.CloseTime = Convert.ToInt64(item[6]);
-                    //_candlestickModel.QuoteAssetVolume = decimal.Parse(item[7], CultureInfo.InvariantCulture);
-                    //_candlestickModel.NumberOfTrades = Convert.ToInt64(item[8]);
-                    //_candlestickModel.TakerBuyQuoteAssetVolume = decimal.Parse(item[9], CultureInfo.InvariantCulture);
-                    //_candlestickModel.TakerBuyBaseAssetVolume = decimal.Parse(item[10], CultureInfo.InvariantCulture);
-                    //_candlestickModel.Ignore = Convert.ToInt32(item[11]);
-
-                    HighLastCandel = decimal.Parse(item[2]);
-                    LowLastCandel = decimal.Parse(item[3]);
-
-                    if (_candlestickModel.OpenPrice == 0)
-                    {
-                        _candlestickModel.OpenPrice = decimal.Parse(item[1]);
-                    }
-                }
-                return _candlestickModel;
+                return lastCandle;
             }
 
             catch (HttpRequestException e)
@@ -85,15 +57,13 @@ namespace ChangePrice.Repository
                 Console.WriteLine($"Exception Caught! ExchangeBinanceProvider GetLastCandle");
                 Console.WriteLine($"Message :{e.Message} ");
             }
-            return _candlestickModel;
+            return lastCandle;
         }
 
         public List<CandlestickModel> GetCandlelList()
         {
             throw new NotImplementedException();
         }
-
-        
     }
 }
 

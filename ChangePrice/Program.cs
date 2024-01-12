@@ -13,6 +13,7 @@ builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
 builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
 builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
 builder.Services.AddScoped<IPriceTracking, PriceTracking>();
+builder.Services.AddScoped<IGenerateCandle, GenerateCandle>();
 
 builder.Services.AddScoped<CandlestickModel, CandlestickModel>();
 

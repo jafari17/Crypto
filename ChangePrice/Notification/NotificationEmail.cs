@@ -68,8 +68,8 @@ namespace ChangePrice.Notification
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error sending email 2: {0}", ex.Message);
-                    _logger.LogError("Error sending email 2: {0}", ex.Message);
+                    Console.WriteLine("Error sending email 2: {0}", e.Message);
+                    _logger.LogError("Error sending email 2: {0}", e.Message);
                     return false;
                 }
 
