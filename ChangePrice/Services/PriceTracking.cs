@@ -31,57 +31,33 @@ namespace ChangePrice.Services
             {
                 ItemRP.PriceDifference = ItemRP.price - Candel.ClosePrice;
 
-                if (ItemRP.IsActive == true && ItemRP.IsNotification == false &&
+                if (ItemRP.IsActive == true && ItemRP.IsTemproprySuspended == false &&
                     DosePriceConditionMeet(ItemRP.price, Candel.HighPrice, Candel.LowPrice))
 
                 {
-
+                    
                     ItemRP.LastTouchPrice = DateTime.Now;
+                    ItemRP.IsCrossedUp = IsCrossedUp(ItemRP.price, Candel.OpenPrice);
+                    var direction = ItemRP.IsCrossedUp ? "UP" : "Down";
 
+                    EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
+                                            lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: direction);
 
-                    if (IsCrossedUp(ItemRP.price, Candel.OpenPrice))  // is crossed up
-                    {
-                        ItemRP.TouchDirection = "Up";
+                    var isEmailSent = _notificationEmail.Send(emailModel);
 
-                        EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
-                                                lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
-
-                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
-
-
-
-                        ///////////////////////////////////////////////////////////////////////////////
-                        ItemRP.IsNotification = true;
-                        _logger.LogWarning($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
-                        ////////////////////////////////////////////////////////////////////////
-
-                        _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
-                    }
-
-                    if (IsCrossedDown(ItemRP.price, Candel.OpenPrice))
-                    {
-                        ItemRP.TouchDirection = "Down";
-
-
-                        EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
-                                                lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: ItemRP.TouchDirection);
-
-                        ItemRP.IsNotification = _notificationEmail.Send(emailModel);
-
-
-                        //////////////////////////////////////////////////////////////////////////////////////
-                        _logger.LogWarning($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
-                        ItemRP.IsNotification= true;
-
-                        ////////////////////////////////////////////////////////////////////////////////////////
-
-                        _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {ItemRP.TouchDirection}");
-                    }
+                    ItemRP.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
+                    _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {direction}");
                 }
             }
 
             _priceRepository.Add(ListRP);
         }
+
+        private bool NeedtoBeSusspended(bool isEmailSent)
+        {
+            return isEmailSent;
+        }
+
         bool DosePriceConditionMeet(decimal price, decimal HighPrice, decimal LowPrice)
         {
             return price <= HighPrice && price >= LowPrice;
@@ -90,10 +66,6 @@ namespace ChangePrice.Services
         bool IsCrossedUp(decimal price, decimal openPrice)
         {
             return price >= openPrice;
-        }
-        bool IsCrossedDown(decimal price, decimal openPrice)
-        {
-            return price <= openPrice;
         }
 
         EmailModel CreatEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection)

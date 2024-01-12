@@ -4,7 +4,7 @@
     {
         public RegisterPriceModel()
         {
-            IsNotification = false;
+            IsTemproprySuspended = false;
             IsActive = true;
         }
 
@@ -15,9 +15,9 @@
         public string Description { get; set; }
 
         public DateTime LastTouchPrice { get; set; }
-        public string TouchDirection { get; set; }  
+        public bool IsCrossedUp { get; set; }  
         public decimal PriceDifference { get; set; }
-        public  bool IsNotification { get; set; }
         public bool IsActive { get; set; }
+        public bool IsTemproprySuspended { get; set; }
     }
 }
