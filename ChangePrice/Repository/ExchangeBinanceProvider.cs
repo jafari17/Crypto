@@ -1,14 +1,4 @@
 ﻿using ChangePrice.Models;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Net;
-using System.Net.Mail;
 using ChangePrice.Services;
 
 namespace ChangePrice.Repository
@@ -37,11 +27,9 @@ namespace ChangePrice.Repository
         public CandlestickModel GetLastCandle()
         {
             var lastCandle = new CandlestickModel();
+
             try
             {
-                //string tradingPair = "BTCUSDT";
-                //string interval = "15m";
-                //int limit = 2;
 
                 var client = new HttpClient();
                 var requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";

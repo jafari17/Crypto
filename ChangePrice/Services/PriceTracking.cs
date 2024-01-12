@@ -11,13 +11,16 @@ namespace ChangePrice.Services
         private IPriceRepository _priceRepository;
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
+        private INotificationTelegram _notificationTelegram;
         private readonly ILogger _logger;
-        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, ILogger<PriceTracking> logger)
+        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
+                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram)
         {
             _priceRepository = priceRepository;
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
             _logger = logger;
+            _notificationTelegram = notificationTelegram;
         }
 
 
@@ -43,7 +46,7 @@ namespace ChangePrice.Services
                                             lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
-
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                     itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
                     _logger.LogInformation($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                 }
