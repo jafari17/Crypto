@@ -1,8 +1,8 @@
 ﻿namespace ChangePrice.Models
 {
-    public class RegisterPriceModel
+    public class AlertModel
     {
-        public RegisterPriceModel()
+        public AlertModel()
         {
             IsTemproprySuspended = false;
             IsActive = true;

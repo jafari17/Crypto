@@ -23,34 +23,33 @@ namespace ChangePrice.Services
 
         public void TrackPriceListChanges() //Track
         {
-            List<RegisterPriceModel> ListRP = _priceRepository.GetList();
+            List<AlertModel> listAlert = _priceRepository.GetList();
 
-            CandlestickModel Candel = _exchangeProvider.GetLastCandle();
+            CandlestickModel candle = _exchangeProvider.GetLastCandle();
 
-            foreach (var ItemRP in ListRP)
+            foreach (var itemAlert in listAlert)
             {
-                ItemRP.PriceDifference = ItemRP.price - Candel.ClosePrice;
+                itemAlert.PriceDifference = itemAlert.price - candle.ClosePrice;
 
-                if (ItemRP.IsActive == true && ItemRP.IsTemproprySuspended == false &&
-                    DosePriceConditionMeet(ItemRP.price, Candel.HighPrice, Candel.LowPrice))
+                if (itemAlert.IsActive == true && itemAlert.IsTemproprySuspended == false &&
+                    DosePriceConditionMeet(itemAlert.price, candle.HighPrice, candle.LowPrice))
 
                 {
-                    
-                    ItemRP.LastTouchPrice = DateTime.Now;
-                    ItemRP.IsCrossedUp = IsCrossedUp(ItemRP.price, Candel.OpenPrice);
-                    var direction = ItemRP.IsCrossedUp ? "UP" : "Down";
+                    itemAlert.LastTouchPrice = DateTime.Now;
+                    itemAlert.IsCrossedUp = IsCrossedUp(itemAlert.price, candle.OpenPrice);
+                    var direction = itemAlert.IsCrossedUp ? "UP" : "Down";
 
-                    EmailModel emailModel = CreatEmailModel(price: ItemRP.price, emailAddress: ItemRP.EmailAddress,
-                                            lastTouchPrice: ItemRP.LastTouchPrice, touchDirection: direction);
+                    EmailModel emailModel = CreateEmailModel(price: itemAlert.price, emailAddress: itemAlert.EmailAddress,
+                                            lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
 
-                    ItemRP.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
-                    _logger.LogInformation($"Touch Price {ItemRP.price} in datetime {ItemRP.LastTouchPrice} {direction}");
+                    itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
+                    _logger.LogInformation($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                 }
             }
 
-            _priceRepository.Add(ListRP);
+            _priceRepository.Add(listAlert);
         }
 
         private bool NeedtoBeSusspended(bool isEmailSent)
@@ -68,7 +67,7 @@ namespace ChangePrice.Services
             return price >= openPrice;
         }
 
-        EmailModel CreatEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection)
+        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection)
         {
 
             string ToAddres = emailAddress;

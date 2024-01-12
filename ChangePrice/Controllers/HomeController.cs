@@ -24,9 +24,9 @@ namespace ChangePrice.Controllers
         {
             //_priceTracking.TrackPriceListChanges();
 
-            List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
+            List<AlertModel> listAlert = _priceRepository.GetList();
 
-            return View(AllPrice);
+            return View(listAlert);
         }
 
 
@@ -36,30 +36,30 @@ namespace ChangePrice.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(RegisterPriceModel registerPriceModel)
+        public IActionResult Add(AlertModel alertModel)
         {
 
             //decimal price;
-            //if (decimal.TryParse(registerPriceModel.price)
+            //if (decimal.TryParse(alertModel.price)
             //{
             //    return Redirect("/");
             //}
 
 
-            RegisterPriceModel rpNew = new RegisterPriceModel()
+            AlertModel alertNew = new AlertModel()
             {
                 Id = Guid.NewGuid(),
                 DateRegisterTime = DateTime.Now,
-                price = registerPriceModel.price,
-                EmailAddress = registerPriceModel.EmailAddress,
-                Description = registerPriceModel.Description,
-                LastTouchPrice = registerPriceModel.LastTouchPrice,
+                price = alertModel.price,
+                EmailAddress = alertModel.EmailAddress,
+                Description = alertModel.Description,
+                LastTouchPrice = alertModel.LastTouchPrice,
             };
 
 
-            List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
-            AllPrice.Add(rpNew);
-            _priceRepository.Add(AllPrice);
+            List<AlertModel> listAlert = _priceRepository.GetList();
+            listAlert.Add(alertNew);
+            _priceRepository.Add(listAlert);
 
             return Redirect("/");
         }
@@ -68,16 +68,16 @@ namespace ChangePrice.Controllers
         {
             try
             {
-                List<RegisterPriceModel> AllPrice = _priceRepository.GetList();
+                List<AlertModel> listAlert = _priceRepository.GetList();
 
-                var item = AllPrice.FirstOrDefault(p => p.Id == id);
+                var item = listAlert.FirstOrDefault(p => p.Id == id);
                 if (item != null)
                 {
-                    AllPrice.Remove(item);
+                    listAlert.Remove(item);
                 }
 
 
-                _priceRepository.Add(AllPrice);
+                _priceRepository.Add(listAlert);
 
                 return Redirect("/");
             }

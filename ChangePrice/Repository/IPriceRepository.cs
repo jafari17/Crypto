@@ -4,9 +4,9 @@ namespace ChangePrice.Repository
 {
     public interface IPriceRepository
     {
-        List<RegisterPriceModel> GetList();
+        List<AlertModel> GetList();
         object Get(Guid id);
         void Remove(Guid id);
-        void Add(List<RegisterPriceModel> item);
+        void Add(List<AlertModel> listAlert);
     }
 }

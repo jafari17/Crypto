@@ -34,7 +34,7 @@ namespace ChangePrice.Repository
             return path;
         }
 
-        public List<RegisterPriceModel> GetList()
+        public List<AlertModel> GetList()
         {
 
             string line = "";
@@ -76,10 +76,10 @@ namespace ChangePrice.Repository
 
             //--------------- JsonConvert.DeserializeObject --------------- // 
 
-            List<RegisterPriceModel> registerPriceList = new List<RegisterPriceModel>();
+            List<AlertModel> registerPriceList = new List<AlertModel>();
             try
             {
-                registerPriceList = JsonConvert.DeserializeObject<List<RegisterPriceModel>>(All);
+                registerPriceList = JsonConvert.DeserializeObject<List<AlertModel>>(All);
                 return registerPriceList;
 
                 _logger.LogInformation("registerPriceList successfully!");
@@ -105,11 +105,9 @@ namespace ChangePrice.Repository
             throw new NotImplementedException();
         }
 
-        public void Add(List<RegisterPriceModel> item)
+        public void Add(List<AlertModel> listAlert)
         {
-
-
-            string jsonString = JsonSerializer.Serialize(item);
+            string jsonString = JsonSerializer.Serialize(listAlert);
 
             try
             {

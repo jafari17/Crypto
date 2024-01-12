@@ -24,12 +24,9 @@ namespace ChangePrice.Notification
 
 
             _FromEmailAddress = _configuration.GetValue<string>("EmailConfig:FromEmailAddress");
-
             _FromEmailAddress2 = _configuration.GetValue<string>("EmailConfig:FromEmailAddress2");
-
             _Password = _configuration.GetValue<string>("EmailConfig:Password");
             _SmtpClient = _configuration.GetValue<string>("EmailConfig:SmtpClient");
-
             _port = _configuration.GetValue<int>("EmailConfig:Port");
 
 
