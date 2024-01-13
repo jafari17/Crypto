@@ -1,6 +1,6 @@
 ﻿using ChangePrice.Models;
 using ChangePrice.Services;
-
+using Newtonsoft.Json;
 namespace ChangePrice.Repository
 {
     public class ExchangeBinanceProvider : IExchangeProvider
@@ -51,6 +51,31 @@ namespace ChangePrice.Repository
         public List<CandlestickModel> GetCandlelList()
         {
             throw new NotImplementedException();
+        }
+
+        public string GetLastPrice()
+        {
+            string lastPrice = "";
+
+            try
+            {
+
+                var client = new HttpClient();
+                var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
+                var response = client.GetStringAsync(requestUri).Result;
+
+                lastPrice = _generateCandle.ResponseToLastPrice(response);
+
+
+                return lastPrice;
+            }
+
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Exception Caught! ExchangeBinanceProvider GetLastCandle");
+                Console.WriteLine($"Message :{e.Message} ");
+            }
+            return lastPrice;
         }
     }
 }

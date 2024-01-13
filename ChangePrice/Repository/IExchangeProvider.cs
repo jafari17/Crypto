@@ -7,7 +7,6 @@ namespace ChangePrice.Repository
     {
         CandlestickModel GetLastCandle();
         List<CandlestickModel> GetCandlelList();
-
-
+        string GetLastPrice();
     }
 }

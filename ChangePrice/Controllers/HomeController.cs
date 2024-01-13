@@ -12,19 +12,24 @@ namespace ChangePrice.Controllers
         private readonly ILogger<HomeController> _logger;
         private IPriceRepository _priceRepository;
         private IPriceTracking _priceTracking;
-        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking)
+        private IExchangeProvider _exchangeProvider;
+
+        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking, IExchangeProvider exchangeProvider)
         {
             _logger = logger;
             _priceRepository = priceRepository;
             _priceTracking = priceTracking;
-            _priceTracking = priceTracking;
+            _exchangeProvider = exchangeProvider;
+            
         }
 
         public IActionResult Index()
         {
             //_priceTracking.TrackPriceListChanges();
 
-            List<AlertModel> listAlert = _priceRepository.GetList();
+            var listAlert = _priceRepository.GetList();
+
+            ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
 
             return View(listAlert);
         }

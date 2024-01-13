@@ -49,5 +49,18 @@ namespace ChangePrice.Services
             }
             return _candlestickModel;
         }
+
+        public string ResponseToLastPrice(string response)
+        {
+
+            dynamic data = JsonConvert.DeserializeObject(response);
+
+            string symbol = data.symbol;
+            string price = data.price;
+
+           
+
+            return $"{symbol}: {price.Split('.')[0]}";
+        }
     }
 }

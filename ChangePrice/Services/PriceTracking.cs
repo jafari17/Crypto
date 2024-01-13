@@ -30,6 +30,8 @@ namespace ChangePrice.Services
 
             CandlestickModel candle = _exchangeProvider.GetLastCandle();
 
+            _exchangeProvider.GetLastPrice();
+
             foreach (var itemAlert in listAlert)
             {
                 itemAlert.PriceDifference = itemAlert.price - candle.ClosePrice;
