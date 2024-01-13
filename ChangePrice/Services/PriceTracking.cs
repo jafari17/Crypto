@@ -45,10 +45,10 @@ namespace ChangePrice.Services
                     var direction = itemAlert.IsCrossedUp ? "UP" : "Down";
 
                     EmailModel emailModel = CreateEmailModel(price: itemAlert.price, emailAddress: itemAlert.EmailAddress,
-                                            lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction);
+                                            lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction, Description: itemAlert.Description);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
-                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
                     itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
                     _logger.LogInformation($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                 }
@@ -72,12 +72,12 @@ namespace ChangePrice.Services
             return price >= openPrice;
         }
 
-        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection)
+        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description)
         {
 
             string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
-            string Body = $"Touch Price {price} in datetime {lastTouchPrice} {touchDirection}";
+            string Body = $"Touch Price {price} in datetime {lastTouchPrice} {touchDirection} \n Description: \n {Description} ";
 
             EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
 

@@ -4,6 +4,8 @@ using System.Diagnostics;
 using ChangePrice.Repository;
 using ChangePrice.Services;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
+using System.Net;
 
 namespace ChangePrice.Controllers
 {
@@ -28,7 +30,6 @@ namespace ChangePrice.Controllers
             //_priceTracking.TrackPriceListChanges();
 
             var listAlert = _priceRepository.GetList();
-
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
 
             return View(listAlert);
@@ -44,11 +45,17 @@ namespace ChangePrice.Controllers
         public IActionResult Add(AlertModel alertModel)
         {
 
-            //decimal price;
-            //if (decimal.TryParse(alertModel.price)
-            //{
-            //    return Redirect("/");
-            //}
+            decimal price = alertModel.price;
+            if (alertModel.price > 0 ){}
+            else
+            {
+                return Redirect("/");
+            }
+            if (string.IsNullOrEmpty(alertModel.EmailAddress))
+            {
+                return Redirect("/");
+            }
+
 
 
             AlertModel alertNew = new AlertModel()
