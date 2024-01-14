@@ -13,14 +13,23 @@ namespace ChangePrice.Services
         private INotificationEmail _notificationEmail;
         private INotificationTelegram _notificationTelegram;
         private readonly ILogger _logger;
+
+        private readonly IConfiguration _configuration;
+
+        private readonly int _minutesBehind;
+
+        //AlertSuspensionPeriod
         public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
-                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram)
+                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram,IConfiguration configuration )
         {
             _priceRepository = priceRepository;
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
             _logger = logger;
             _notificationTelegram = notificationTelegram;
+            _configuration = configuration;
+
+            _minutesBehind = _configuration.GetValue<int>("AlertSuspensionPeriod:MinutesBehind");
         }
 
 
@@ -48,9 +57,12 @@ namespace ChangePrice.Services
                                             lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction, Description: itemAlert.Description);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
-                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
+                    //var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime" +
+                    //                                        $" {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
 
-                    //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
+
+
+                    //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);  /// کامنت تا تغییر 
 
                     _logger.LogInformation($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                 }
@@ -66,13 +78,10 @@ namespace ChangePrice.Services
 
         private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
         {
-            var HourBehind = DateTime.Now.AddMinutes(-60);
-
-            if (LastTouchPrice < DateTime.Now.AddMinutes(-60))
+            if (LastTouchPrice < DateTime.Now.AddMinutes(_minutesBehind))
             {
                 return true;
             }
-        
             return false;
         }
 

@@ -10,28 +10,24 @@
 <div class=" row, card">
     <div class="col-md-8">
 
-        <form asp-action="Add">
+        <form action="Add" method="post">
             <br />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" type="number" required />
-                <span asp-validation-for="price" class="text-danger"></span>
+                <label for="price" class="control-label">Price </label>
+                <input id="price" name="price" class="form-control" type="number" required />
             </div>
             <br />
 
             <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" type="email" required />
-                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                <label for="EmailAddress" class="control-label">EmailAddress</label>
+                <input id="EmailAddress" name="EmailAddress" class="form-control" type="email" required />
             </div>
             <br />
 
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label for="Description" class="control-label">Description</label>
+                <input id="Description" name="Description" class="form-control" />
             </div>
             <br />
 
@@ -39,7 +35,6 @@
                 <input type="submit" value="ADD" class="btn btn-primary" />
             </div>
             <br />
-
         </form>
     </div>
 </div>
@@ -47,47 +42,105 @@
 
 
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="Add" method="post">
+                <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="price" class="control-label">Price </label>
+                    <input id="price" name="price" class="form-control" type="number" required />
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label for="EmailAddress" class="control-label">EmailAddress</label>
+                    <input id="EmailAddress" name="EmailAddress" class="form-control" type="email" required />
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label for="Description" class="control-label">Description</label>
+                    <input id="Description" name="Description" class="form-control" />
+                </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="form-group">
+                            <input type="submit" value="ADD" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
 
 
 
-
-
-@*
-<style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    .form-group {
-        width: 600px;
-        position: center;
-    }
-</style>
-
-
-
-<body class="text-center" data-hasqtip="0">
-
-    <form class="form-group">
-        <img class="mb-4" src="/docs/4.6/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Add Triger Price</h1>
-        <label for="inputEmail" class="sr-only">price</label>
-        <input type="price" id="price" class="form-control" placeholder="price" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Email Address</label>
-        <input type="email" id="EmailAddress" class="form-control" placeholder="Email Address" required="">
-        <label for="inputPassword" class="sr-only">Description</label>
-        <input type="Description" id="Description" class="form-control" placeholder="Description" required="">
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">ADD</button>
-        <p class="mt-5 mb-3 text-muted">© 2017-2022</p>
-    </form>
-</body>*@
+    </div>
+</div>
+
+
+
+@*<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Add">
+            <div class="modal-body">
+
+                    <br />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="price" class="control-label"></label>
+                        <input asp-for="price" class="form-control" type="number" required />
+                        <span asp-validation-for="price" class="text-danger"></span>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" type="email" required />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <br />          
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>    
+                <input type="submit" value="ADD" class="btn btn-primary" />
+            </div>
+            </form>
+        </div>
+    </div>
+</div>*@
+
