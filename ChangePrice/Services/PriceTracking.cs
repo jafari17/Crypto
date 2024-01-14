@@ -37,19 +37,21 @@ namespace ChangePrice.Services
                 itemAlert.PriceDifference = itemAlert.price - candle.ClosePrice;
 
                 if (itemAlert.IsActive == true && itemAlert.IsTemproprySuspended == false &&
-                    DosePriceConditionMeet(itemAlert.price, candle.HighPrice, candle.LowPrice))
+                    DosePriceConditionMeet(itemAlert.price, candle.HighPrice, candle.LowPrice) && AlertSuspensionPeriod(itemAlert.LastTouchPrice))
 
                 {
                     itemAlert.LastTouchPrice = DateTime.Now;
                     itemAlert.IsCrossedUp = IsCrossedUp(itemAlert.price, candle.OpenPrice);
-                    var direction = itemAlert.IsCrossedUp ? "UP" : "Down";
+                    var direction = itemAlert.IsCrossedUp ? "↗" : "↘";
 
                     EmailModel emailModel = CreateEmailModel(price: itemAlert.price, emailAddress: itemAlert.EmailAddress,
                                             lastTouchPrice: itemAlert.LastTouchPrice, touchDirection: direction, Description: itemAlert.Description);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
                     var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
-                    itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
+
+                    //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);
+
                     _logger.LogInformation($"Touch Price {itemAlert.price} in datetime {itemAlert.LastTouchPrice} {direction}");
                 }
             }
@@ -60,6 +62,18 @@ namespace ChangePrice.Services
         private bool NeedtoBeSusspended(bool isEmailSent)
         {
             return isEmailSent;
+        }
+
+        private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
+        {
+            var HourBehind = DateTime.Now.AddMinutes(-60);
+
+            if (LastTouchPrice < DateTime.Now.AddMinutes(-60))
+            {
+                return true;
+            }
+        
+            return false;
         }
 
         bool DosePriceConditionMeet(decimal price, decimal HighPrice, decimal LowPrice)
