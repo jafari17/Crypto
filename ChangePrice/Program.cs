@@ -9,14 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
-builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
-builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
-builder.Services.AddScoped<INotificationTelegram, NotificationTelegram>();
-builder.Services.AddScoped<IPriceTracking, PriceTracking>();
-builder.Services.AddScoped<IGenerateCandle, GenerateCandle>();
+builder.Services.AddScopedServices();
 
-builder.Services.AddScoped<CandlestickModel, CandlestickModel>();
+
+//builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
+//builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
+//builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
+//builder.Services.AddScoped<INotificationTelegram, NotificationTelegram>();
+//builder.Services.AddScoped<IPriceTracking, PriceTracking>();
+//builder.Services.AddScoped<IGenerateCandle, GenerateCandle>();
+
+//builder.Services.AddScoped<CandlestickModel, CandlestickModel>();
 
 builder.Services.AddHostedService<TimerBackgroundService>();
 
