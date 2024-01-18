@@ -1,7 +1,6 @@
 using ChangePrice;
 using ChangePrice.Models;
 using ChangePrice.Notification;
-using ChangePrice.Repository;
 using ChangePrice.Services;
 
 var builder = WebApplication.CreateBuilder(args);

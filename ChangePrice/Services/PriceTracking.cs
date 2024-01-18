@@ -1,14 +1,13 @@
 ﻿using ChangePrice.Controllers;
+using ChangePrice.Data.Repository;
 using ChangePrice.Models;
 using ChangePrice.Notification;
-using ChangePrice.Repository;
-
 
 namespace ChangePrice.Services
 {
     public class PriceTracking : IPriceTracking
     {
-        private IPriceRepository _priceRepository;
+        private IAlertRepository _alertRepository;
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
         private INotificationTelegram _notificationTelegram;
@@ -19,10 +18,10 @@ namespace ChangePrice.Services
         private readonly int _minutesBehind;
 
         //AlertSuspensionPeriod
-        public PriceTracking(IPriceRepository priceRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
+        public PriceTracking(IAlertRepository alertRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
                              ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram,IConfiguration configuration )
         {
-            _priceRepository = priceRepository;
+            _alertRepository = alertRepository;
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
             _logger = logger;
@@ -35,7 +34,7 @@ namespace ChangePrice.Services
 
         public void TrackPriceListChanges() //Track
         {
-            List<AlertModel> listAlert = _priceRepository.GetList();
+            List<AlertModel> listAlert = _alertRepository.GetList();
 
             CandlestickModel candle = _exchangeProvider.GetLastCandle();
 
@@ -68,7 +67,7 @@ namespace ChangePrice.Services
                 }
             }
 
-            _priceRepository.Add(listAlert);
+            _alertRepository.InsertAlert(listAlert);
         }
 
         private bool NeedtoBeSusspended(bool isEmailSent)

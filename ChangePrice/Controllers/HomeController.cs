@@ -1,25 +1,25 @@
 ﻿using ChangePrice.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using ChangePrice.Repository;
 using ChangePrice.Services;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Net;
+using ChangePrice.Data.Repository;
 
 namespace ChangePrice.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private IPriceRepository _priceRepository;
+        private IAlertRepository _alertRepository;
         private IPriceTracking _priceTracking;
         private IExchangeProvider _exchangeProvider;
 
-        public HomeController(ILogger<HomeController> logger, IPriceRepository priceRepository, IPriceTracking priceTracking, IExchangeProvider exchangeProvider)
+        public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking, IExchangeProvider exchangeProvider)
         {
             _logger = logger;
-            _priceRepository = priceRepository;
+            _alertRepository = alertRepository;
             _priceTracking = priceTracking;
             _exchangeProvider = exchangeProvider;
             
@@ -29,7 +29,7 @@ namespace ChangePrice.Controllers
         {
             //_priceTracking.TrackPriceListChanges();
 
-            var listAlert = _priceRepository.GetList();
+            var listAlert = _alertRepository.GetList();
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
 
             return View(listAlert);
@@ -69,9 +69,9 @@ namespace ChangePrice.Controllers
             };
 
 
-            List<AlertModel> listAlert = _priceRepository.GetList();
+            List<AlertModel> listAlert = _alertRepository.GetList();
             listAlert.Add(alertNew);
-            _priceRepository.Add(listAlert);
+            _alertRepository.InsertAlert(listAlert);
 
             return Redirect("/");
         }
@@ -80,7 +80,7 @@ namespace ChangePrice.Controllers
         {
             try
             {
-                List<AlertModel> listAlert = _priceRepository.GetList();
+                List<AlertModel> listAlert = _alertRepository.GetList();
 
                 var item = listAlert.FirstOrDefault(p => p.Id == id);
                 if (item != null)
@@ -89,7 +89,7 @@ namespace ChangePrice.Controllers
                 }
 
 
-                _priceRepository.Add(listAlert);
+                _alertRepository.InsertAlert(listAlert);
 
                 return Redirect("/");
             }

@@ -13,7 +13,6 @@
         public decimal price { get; set; }
         public string EmailAddress { get; set; }
         public string Description { get; set; }
-
         public DateTime LastTouchPrice { get; set; }
         public bool IsCrossedUp { get; set; }  
         public decimal PriceDifference { get; set; }

@@ -1,6 +1,5 @@
 ﻿using ChangePrice.Controllers;
 using ChangePrice.Notification;
-using ChangePrice.Repository;
 using ChangePrice.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
