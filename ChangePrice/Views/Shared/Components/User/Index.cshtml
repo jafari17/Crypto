@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<UserDto>
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#UserModal">
@@ -16,7 +16,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="User/AddUser" method="post">
+            <form asp-controller="User" asp-action="AddUser" method="post">
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -41,7 +41,7 @@
             </form>
 
 
-@*            <table class="table">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -58,13 +58,13 @@
                                 <td>@item.Name</td>
                                 <td>@item.EmailAddress</td>
                                 <td>
-                                    <a asp-action="RemoveUser" asp-route-id="@item.UserId">Delete</a>
+                                    <a asp-controller="User" asp-action="RemoveUser" asp-route-id="@item.UserId">Delete</a>
                                 </td>
                             </tr>
                         }
                     }
                 </tbody>
-            </table>*@
+            </table>
 
 
 

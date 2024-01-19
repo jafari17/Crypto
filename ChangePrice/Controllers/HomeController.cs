@@ -38,9 +38,10 @@ namespace ChangePrice.Controllers
             //_priceTracking.TrackPriceListChanges();
 
             var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
+            var listReportUserAlertsDistinct = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
             ViewBag.UserList = _userRepository.GetAllUser();
-            return View(listReportUserAlerts);
+            return View(listReportUserAlertsDistinct);
         }
 
 
