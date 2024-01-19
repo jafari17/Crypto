@@ -38,6 +38,9 @@ namespace ChangePrice.Controllers
         [HttpPost]
         public IActionResult AddUser(UserName user)
         {
+
+
+
             UserName userNew = new UserName()
             {
                 Name = user.Name,
