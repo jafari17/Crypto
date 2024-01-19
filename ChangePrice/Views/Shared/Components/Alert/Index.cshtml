@@ -25,11 +25,26 @@
                     </div>
                     <br />
 
+@*                    <div class="form-group">
+                        <label for="UserId" class="control-label">UserId</label>
+                        <input id="UserId" name="UserId" class="form-control"  required />
+                    </div>
+                    <br />*@
+
                     <div class="form-group">
-                        <label for="EmailAddress" class="control-label">EmailAddress</label>
-                        <input id="EmailAddress" name="EmailAddress" class="form-control" type="email" required />
+                        <label for="UserId" class="control-label">UserId</label>
+                        <select id="UserId" name="UserId" class="form-control" required>
+                            <option value="">-- Select User --</option>
+                            @{
+                                foreach (var Useritem in ViewBag.UserList)
+                                {
+                                    <option value=@(Useritem.UserId)>@(Useritem.Name)</option>
+                                }
+                            }
+                        </select>
                     </div>
                     <br />
+
 
                     <div class="form-group">
                         <label for="Description" class="control-label">Description</label>

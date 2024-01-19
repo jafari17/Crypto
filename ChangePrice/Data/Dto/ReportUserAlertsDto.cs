@@ -4,6 +4,7 @@
     {
         public string Name { get; set; }
         public string EmailAddress { get; set; }
+        //public List<AlertDto> AlertlistForUser { get; set; }
 
         public int AlertId { get; set; }
         public int? UserId { get; set; }

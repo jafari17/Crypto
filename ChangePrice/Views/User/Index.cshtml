@@ -1,0 +1,27 @@
+﻿@model IEnumerable<UserDto>
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">User Email</th>
+            <th scope="col">Edit / delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.EmailAddress</td>
+                    <td>
+                        <a asp-action="RemoveUser" asp-route-id="@item.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

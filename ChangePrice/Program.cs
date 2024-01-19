@@ -1,7 +1,9 @@
 using ChangePrice;
+using ChangePrice.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
 using ChangePrice.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScopedServices();
+
+
+#region Db Context
+
+builder.Services.AddDbContext<TestCryptoCreatQueryContext>(options =>
+{ options.UseSqlServer("Data Source =.;Initial Catalog=TestCryptoCreatQuery;Integrated Security=true"); });
+#endregion
+
+
 
 
 //builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();

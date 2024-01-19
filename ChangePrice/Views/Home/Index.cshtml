@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AlertModel>
+﻿@model IEnumerable<ReportUserAlertsDto>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -7,39 +7,82 @@
 <div class="text-center">
     <h2>@ViewBag.LastPrice</h2>
     <h3 class="display-4">Alert list</h3>
-    <br/>
+
+
+    <div class="col-2">
+        @*<label for="UserId" class="control-label"></label>*@
+        <select id="UserId" name="UserId" class="form-control">
+            <option value=-1>-- Select user alerts --</option>
+            @{
+                foreach (var Useritem in ViewBag.UserList)
+                {
+
+                    <a asp-action="Index" asp-route-id=@(Useritem.UserId)>
+                    <option>@(Useritem.Name)</option> </a>
+
+                    //<option value=@(Useritem.UserId)>@(Useritem.Name)</option>
+                    //<option asp-action="Index" asp-route-id=@(Useritem.UserId)>@(Useritem.Name)</option>
+
+                }
+            }
+        </select>
+    </div>
+
+
+
+    <br />
     <table class="table">
         <thead>
-        <tr>
+            <tr>
                 <th scope="col">Date RegisterTime</th>
+                <th scope="col">User Email</th>
                 <th scope="col">price</th>
                 <th scope="col">Price Difference</th>
                 <th scope="col">Last TouchPrice</th>
                 <th scope="col"></th>
-        </tr>
+            </tr>
         </thead>
         <tbody>
             @if (Model != null)
             {
                 @foreach (var item in Model)
                 {
+                    @*@if (item.UserId ==  )*@
                     <tr>
                         <td>@item.DateRegisterTime</td>
-                        <td>@item.price</td>
+                        <td>@item.EmailAddress</td>
+                        <td>@item.Price</td>
                         <td>@Convert.ToInt32(item.PriceDifference)</td>
-                        
-                        @if (item.LastTouchPrice != DateTime.MinValue)
+
+                        @if (item.LastTouchPrice != null)
                         {
-                            <td>@item.LastTouchPrice   @{ if (item.IsCrossedUp){ <samp>UP</samp>}
-                                                          else {<samp>Down</samp> } }
-                            </td>
+                            if (item.IsCrossedUp.HasValue)
+                            {
+                                <td>
+                                    @item.LastTouchPrice   @{
+                                        if (item.IsCrossedUp.Value)
+                                        {
+                                            <samp>UP</samp>
+                                        }
+                                        else
+                                        {
+                                            <samp>Down</samp>
+                                        }
+                                    }
+                                </td>
+                            }
+                            else
+                            {
+                                <td> - </td>
+                            }
+
                         }
                         else
                         {
                             <td>-</td>
                         }
                         <td>
-                            <a asp-action="RemovePrice" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="RemovePrice" asp-route-id="@item.AlertId">Delete</a>
                         </td>
                     </tr>
                 }

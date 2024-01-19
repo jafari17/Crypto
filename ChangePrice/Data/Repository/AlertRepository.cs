@@ -13,7 +13,7 @@ namespace ChangePrice.Data.Repository
             _db = context;
         }
 
-        public List<AlertDto> GetAll()
+        public List<AlertDto> GetAllAlertDto()
         {
             var alertList = _db.Alert.ToList();
 
@@ -57,7 +57,11 @@ namespace ChangePrice.Data.Repository
             };
 
             return alertDto;
+        }
 
+        public List<Alert> GetAllAlert()
+        {
+            return _db.Alert.ToList();
         }
         public void InsertAlert(Alert alert)
         {
@@ -67,6 +71,23 @@ namespace ChangePrice.Data.Repository
 
         public void UpdateAlert(Alert alert)
         {
+            _db.Entry(alert).State = EntityState.Modified;
+        }
+        public void UpdateAlert(ReportUserAlertsDto reportUserAlertsDto)
+        {
+            var alert = _db.Alert.Find(reportUserAlertsDto.AlertId);
+
+            //alert.AlertId = reportUserAlertsDto.AlertId;
+            alert.UserId = reportUserAlertsDto.UserId;
+            alert.DateRegisterTime = reportUserAlertsDto.DateRegisterTime;
+            alert.Price = reportUserAlertsDto.Price;
+            alert.Description = reportUserAlertsDto.Description;
+            alert.LastTouchPrice = reportUserAlertsDto.LastTouchPrice;
+            alert.IsCrossedUp = reportUserAlertsDto.IsCrossedUp;
+            alert.PriceDifference = reportUserAlertsDto.PriceDifference;
+            alert.IsActive = reportUserAlertsDto.IsActive;
+            alert.IsTemproprySuspended = reportUserAlertsDto.IsTemproprySuspended;
+
             _db.Entry(alert).State = EntityState.Modified;
         }
         public void DeleteAlert(Alert alert)

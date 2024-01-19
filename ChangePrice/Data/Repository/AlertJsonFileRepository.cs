@@ -1,131 +1,131 @@
-﻿using ChangePrice.Models;
-using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+﻿//using ChangePrice.Models;
+//using Microsoft.AspNetCore.Hosting;
+//using Newtonsoft.Json;
+//using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace ChangePrice.Data.Repository
-{
-    public class AlertJsonFileRepository : IAlertRepository
-    {
-        private IWebHostEnvironment _environment;
+//namespace ChangePrice.Data.Repository
+//{
+//    public class AlertJsonFileRepository : IAlertRepository
+//    {
+//        private IWebHostEnvironment _environment;
 
-        private readonly IConfiguration _configuration;
-        private readonly string _Directory;
-        private readonly string _JsonFile;
-        private readonly ILogger _logger;
+//        private readonly IConfiguration _configuration;
+//        private readonly string _Directory;
+//        private readonly string _JsonFile;
+//        private readonly ILogger _logger;
 
-        public AlertJsonFileRepository(IWebHostEnvironment environment, IConfiguration configuration, ILogger<AlertJsonFileRepository> logger)
-        {
-            _environment = environment;
-            _logger = logger;
+//        public AlertJsonFileRepository(IWebHostEnvironment environment, IConfiguration configuration, ILogger<AlertJsonFileRepository> logger)
+//        {
+//            _environment = environment;
+//            _logger = logger;
 
-            _configuration = configuration;
-            _Directory = _configuration.GetValue<string>("DataPath:Directory");
-            _JsonFile = _configuration.GetValue<string>("DataPath:JsonFile");
-
-
-        }
-        private string GetFilePath()
-        {
-            string serverPath = _environment.WebRootPath;
-            var path = Path.Combine(serverPath, _Directory, _JsonFile);
-            return path;
-        }
-
-        public List<AlertModel> GetList()
-        {
-
-            string line = "";
-            string All = "";
-            try
-            {
-                string path = GetFilePath();
-
-                //Pass the file path and file name to the StreamReader constructor
-                StreamReader sr = new StreamReader(GetFilePath());
-                //Read the first line of text
-                line = sr.ReadLine();
-                //Continue to read until you reach end of file
-                while (line != null)
-                {
-                    //write the line to console window
-                    //Console.WriteLine(line);
-                    All += line;
-                    //Read the next line
-                    line = sr.ReadLine();
-                }
-                //close the file
-                sr.Close();
-
-                if (All == "")
-                {
-                    All = "[]";
-                }
-
-                _logger.LogInformation("GetList successfully!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message);
-                _logger.LogError("Exception: " + e.Message);
-            }
+//            _configuration = configuration;
+//            _Directory = _configuration.GetValue<string>("DataPath:Directory");
+//            _JsonFile = _configuration.GetValue<string>("DataPath:JsonFile");
 
 
+//        }
+//        private string GetFilePath()
+//        {
+//            string serverPath = _environment.WebRootPath;
+//            var path = Path.Combine(serverPath, _Directory, _JsonFile);
+//            return path;
+//        }
 
-            //--------------- JsonConvert.DeserializeObject --------------- // 
+//        public List<AlertModel> GetList()
+//        {
 
-            List<AlertModel> registerPriceList = new List<AlertModel>();
-            try
-            {
-                registerPriceList = JsonConvert.DeserializeObject<List<AlertModel>>(All);
-                _logger.LogInformation("registerPriceList successfully!");
-                return registerPriceList;
+//            string line = "";
+//            string All = "";
+//            try
+//            {
+//                string path = GetFilePath();
+
+//                //Pass the file path and file name to the StreamReader constructor
+//                StreamReader sr = new StreamReader(GetFilePath());
+//                //Read the first line of text
+//                line = sr.ReadLine();
+//                //Continue to read until you reach end of file
+//                while (line != null)
+//                {
+//                    //write the line to console window
+//                    //Console.WriteLine(line);
+//                    All += line;
+//                    //Read the next line
+//                    line = sr.ReadLine();
+//                }
+//                //close the file
+//                sr.Close();
+
+//                if (All == "")
+//                {
+//                    All = "[]";
+//                }
+
+//                _logger.LogInformation("GetList successfully!");
+//            }
+//            catch (Exception e)
+//            {
+//                Console.WriteLine("Exception: " + e.Message);
+//                _logger.LogError("Exception: " + e.Message);
+//            }
 
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Json Convert Error");
-                _logger.LogError("Exception: " + e.Message);
-            }
 
-            return registerPriceList;
+//            //--------------- JsonConvert.DeserializeObject --------------- // 
 
-        }
+//            List<AlertModel> registerPriceList = new List<AlertModel>();
+//            try
+//            {
+//                registerPriceList = JsonConvert.DeserializeObject<List<AlertModel>>(All);
+//                _logger.LogInformation("registerPriceList successfully!");
+//                return registerPriceList;
 
 
-        public object GetAlertById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+//            }
+//            catch (Exception e)
+//            {
+//                Console.WriteLine("Json Convert Error");
+//                _logger.LogError("Exception: " + e.Message);
+//            }
 
-        public void DeleteById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+//            return registerPriceList;
 
-        public void InsertAlert(List<AlertModel> listAlert)
-        {
-            string jsonString = JsonSerializer.Serialize(listAlert);
+//        }
 
-            try
-            {
-                //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter(GetFilePath());
-                //Write a line of text
-                sw.WriteLine(jsonString);
-                //Write a second line of text
-                sw.WriteLine("");
-                //Close the file
-                sw.Close();
 
-                _logger.LogInformation(" Add RegisterPrice successfully!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message);
-                _logger.LogError("Exception: " + e.Message);
-            }
-        }
-    }
-}
+//        public object GetAlertById(Guid id)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        public void DeleteById(Guid id)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        public void InsertAlert(List<AlertModel> listAlert)
+//        {
+//            string jsonString = JsonSerializer.Serialize(listAlert);
+
+//            try
+//            {
+//                //Pass the filepath and filename to the StreamWriter Constructor
+//                StreamWriter sw = new StreamWriter(GetFilePath());
+//                //Write a line of text
+//                sw.WriteLine(jsonString);
+//                //Write a second line of text
+//                sw.WriteLine("");
+//                //Close the file
+//                sw.Close();
+
+//                _logger.LogInformation(" Add RegisterPrice successfully!");
+//            }
+//            catch (Exception e)
+//            {
+//                Console.WriteLine("Exception: " + e.Message);
+//                _logger.LogError("Exception: " + e.Message);
+//            }
+//        }
+//    }
+//}

@@ -1,0 +1,75 @@
+﻿
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#UserModal">
+        Add User
+    </button>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="UserModal" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UserModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="User/AddUser" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="Name" class="control-label">Name </label>
+                        <input id="Name" name="Name" class="form-control" required />
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="EmailAddress" class="control-label">EmailAddress</label>
+                        <input id="EmailAddress" name="EmailAddress" class="form-control" type="email" required />
+                    </div>
+                    <br />
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="form-group">
+                            <input type="submit" value="ADD" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+@*            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">User Email</th>
+                        <th scope="col">Edit / delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.EmailAddress</td>
+                                <td>
+                                    <a asp-action="RemoveUser" asp-route-id="@item.UserId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>*@
+
+
+
+
+
+        </div>
+    </div>
+</div>

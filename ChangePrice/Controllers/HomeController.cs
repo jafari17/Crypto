@@ -6,6 +6,8 @@ using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Net;
 using ChangePrice.Data.Repository;
+using ChangePrice.DataBase;
+using ChangePrice.Data.Dto;
 
 namespace ChangePrice.Controllers
 {
@@ -13,27 +15,56 @@ namespace ChangePrice.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private IAlertRepository _alertRepository;
+        private IUserRepository _userRepository;
         private IPriceTracking _priceTracking;
         private IExchangeProvider _exchangeProvider;
+        private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
+        
 
-        public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking, IExchangeProvider exchangeProvider)
+
+        public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking,
+                              IExchangeProvider exchangeProvider, IUserRepository userRepository, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
         {
             _logger = logger;
             _alertRepository = alertRepository;
             _priceTracking = priceTracking;
             _exchangeProvider = exchangeProvider;
-            
+            _userRepository = userRepository;
+            _reportUserAlertsDtoRepository = reportUserAlertsDtoRepository;
         }
 
         public IActionResult Index()
         {
             //_priceTracking.TrackPriceListChanges();
 
-            var listAlert = _alertRepository.GetList();
+            var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
-
-            return View(listAlert);
+            ViewBag.UserList = _userRepository.GetAllUser();
+            return View(listReportUserAlerts);
         }
+
+
+
+        //public IActionResult Index(int id = -1)
+        //{
+        //    //_priceTracking.TrackPriceListChanges();
+        //    ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
+        //    ViewBag.UserList = _userRepository.GetAllUser();
+        //    if (id == -1)
+        //    {
+        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
+        //        return View(listReportUserAlerts);
+        //    }
+        //    else
+        //    {
+        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(id);
+        //        return View(listReportUserAlerts);
+        //    }
+
+        //}
+
+
+
 
 
         public IActionResult Add()
@@ -42,62 +73,40 @@ namespace ChangePrice.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AlertModel alertModel)
+        public IActionResult Add(Alert alert)
         {
 
-            decimal price = alertModel.price;
-            if (alertModel.price > 0 ){}
+           
+            if (alert.Price > 0) { }
             else
             {
                 return Redirect("/");
             }
-            if (string.IsNullOrEmpty(alertModel.EmailAddress))
+            if (alert.UserId == null)
             {
                 return Redirect("/");
             }
 
-
-
-            AlertModel alertNew = new AlertModel()
+            Alert alertNew = new Alert()
             {
-                Id = Guid.NewGuid(),
+                AlertId = alert.AlertId,
                 DateRegisterTime = DateTime.Now,
-                price = alertModel.price,
-                EmailAddress = alertModel.EmailAddress,
-                Description = alertModel.Description,
-                LastTouchPrice = alertModel.LastTouchPrice,
+                Price = alert.Price,
+                Description = alert.Description,
+                LastTouchPrice = DateTime.Now.AddYears(-10),
+                UserId = alert.UserId
             };
 
-
-            List<AlertModel> listAlert = _alertRepository.GetList();
-            listAlert.Add(alertNew);
-            _alertRepository.InsertAlert(listAlert);
+            _alertRepository.InsertAlert(alertNew);
+            _alertRepository.Save();
 
             return Redirect("/");
         }
 
-        public IActionResult RemovePrice(Guid id)
+        public IActionResult RemovePrice(int id)
         {
-            try
-            {
-                List<AlertModel> listAlert = _alertRepository.GetList();
-
-                var item = listAlert.FirstOrDefault(p => p.Id == id);
-                if (item != null)
-                {
-                    listAlert.Remove(item);
-                }
-
-
-                _alertRepository.InsertAlert(listAlert);
-
-                return Redirect("/");
-            }
-            catch
-            {
-                Console.WriteLine("Remove Price Error");
-            }
-
+            _alertRepository.DeleteAlertById(id);
+            _alertRepository.Save();
             return Redirect("/");
         }
 

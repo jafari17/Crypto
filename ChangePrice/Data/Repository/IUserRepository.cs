@@ -14,8 +14,7 @@ namespace ChangePrice.Data.Repository
         void DeleteUser(UserName user);
 
 
-        List<ReportUserAlertsDto> GetAllReportUserAlerts();
-        List<ReportUserAlertsDto> GetReportUserAlertsByUserId(int userId);
+
         void Save();
     }
 }
