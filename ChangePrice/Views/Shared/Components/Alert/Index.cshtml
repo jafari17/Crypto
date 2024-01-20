@@ -15,7 +15,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
+@*
             <form asp-controller="home" asp-action="add" method="post">
                 <div class="modal-body">
 
@@ -25,11 +25,6 @@
                     </div>
                     <br />
 
-@*                    <div class="form-group">
-                        <label for="UserId" class="control-label">UserId</label>
-                        <input id="UserId" name="UserId" class="form-control"  required />
-                    </div>
-                    <br />*@
 
                     <div class="form-group">
                         <label for="UserId" class="control-label">UserId</label>
@@ -48,7 +43,7 @@
 
                     <div class="form-group">
                         <label for="Description" class="control-label">Description</label>
-                        <input id="Description" name="Description" class="form-control" />
+                        <input id="Description" name="Description" class="form-control"  />
                     </div>
 
 
@@ -60,6 +55,94 @@
                     </div>
                 </div>
             </form>
+*@
+
+
+            <form id="FormAddAlert">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <price for="price" class="control-label">price</price>
+                        <input id="price" name="price" class="form-control" type="number" required />
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="UserId" class="control-label">UserId</label>
+                        <select id="UserId" name="UserId" class="form-control" required>
+                            <option value="">-- Select User --</option>
+                            @{
+                                foreach (var Useritem in ViewBag.UserList)
+                                {
+                                    <option value=@(Useritem.UserId)>@(Useritem.Name)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <br />
+
+
+                    <div class="form-group">
+                        <label for="Description" class="control-label">Description</label>
+                        <input id="Description" name="Description" class="form-control"  />
+                    </div>
+
+                    <div id="resultAddAlert" class="alert text-primary" role="alert"></div>
+
+                    <div class="modal-footer">
+                        <button id="ButtonCloseAddAlert" type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                        <div class="form-group">
+                            <input id="ButtonAddAlert" value="Add" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+
+
+    $("#ButtonAddAlert").click(function (e) { // Target the button with the correct ID
+        e.preventDefault(); // Prevent default form submission
+
+        var formData = $("#FormAddAlert").serialize(); // Collect form data
+
+        console.log("formData")
+        console.log(formData)
+
+        $.ajax({
+            url: "/Home/AddAlertajax", 
+            type: "POST",
+            data: formData,
+            dataType: "json",
+
+
+            success: function (response) {
+                $("#resultAddAlert").text(response.message);
+
+                console.log(response.message)
+
+                if (response.message === true) {  
+
+                    console.log("in if true ")
+
+                    //$("#ButtonCloseAddAlert").click();
+
+                    $(location).attr('href', $(location).attr('href'));
+
+                }
+            },
+
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle error
+                console.error("AJAX error:", textStatus, errorThrown);
+            }
+        });
+    });
+
+</script>

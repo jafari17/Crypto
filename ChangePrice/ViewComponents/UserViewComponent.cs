@@ -17,5 +17,7 @@ namespace ChangePrice.ViewComponents
             var userList = _userRepository.GetAllUser();
             return View("Index", userList);
         }
+
+
     }
 }

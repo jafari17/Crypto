@@ -38,10 +38,10 @@ namespace ChangePrice.Controllers
             //_priceTracking.TrackPriceListChanges();
 
             var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
-            var listReportUserAlertsDistinct = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
+            var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
             ViewBag.UserList = _userRepository.GetAllUser();
-            return View(listReportUserAlertsDistinct);
+            return View(listReportUserAlertsDesc);
         }
 
 
@@ -103,6 +103,48 @@ namespace ChangePrice.Controllers
 
             return Redirect("/");
         }
+
+        [HttpPost]
+        public IActionResult AddAlertajax(int price, int UserId, string Description)
+        {
+
+
+            if (price <= 0) 
+            {
+                return Json(new { message = "Enter a price greater than zero" });
+            }
+            if (UserId <= 0)
+            {
+                return Json(new { message = "Select User" });
+            }
+
+
+            try
+            {
+                Alert alertNew = new Alert()
+                {
+                    DateRegisterTime = DateTime.Now,
+                    Price = price,
+                    Description = Description,
+                    LastTouchPrice = DateTime.Now.AddYears(-10),
+                    UserId = UserId
+                };
+
+                _alertRepository.InsertAlert(alertNew);
+                _alertRepository.Save();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("", e.Message);
+                _logger.LogError("", e.Message);
+                return Json(new { message = "There was a problem saving in the database"});
+            }
+            return Json(new { message = true });
+        }
+
+
+
 
         public IActionResult RemovePrice(int id)
         {
