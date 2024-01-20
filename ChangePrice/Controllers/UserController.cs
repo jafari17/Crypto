@@ -70,13 +70,10 @@ namespace ChangePrice.Controllers
             {
                 return Json(new { message = "EmailAddress is empty" }); ;
             }
-
             if(_userRepository.GetAllUser().Any(u => u.EmailAddress == EmailAddress))
             {
                 return Json(new { message = "Duplicate email" }); ;
             }
-
-            
 
             try
             {

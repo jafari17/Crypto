@@ -60,7 +60,7 @@ namespace ChangePrice.Services
                     EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,
                                             lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value, touchDirection: direction, Description: itemReportUserAlerts.Description);
 
-                    //var isEmailSent = _notificationEmail.Send(emailModel);
+                    var isEmailSent = _notificationEmail.Send(emailModel);
                     //var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime" +
                     //                                        $" {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
 

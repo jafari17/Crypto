@@ -26,29 +26,3 @@
     </tbody>
 </table>
 
-<button id="MyButtonx">Click Me</button>
-
-<input id="nameInputx" />
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-    $("#MyButtonx").click(function () {
-        var name = $("#nameInputx").val();
-
-        $.ajax({
-            url: "/User/MyAction", // URL of the controller action
-            type: "POST",          // HTTP method
-            data: { name: name },  // Data to send
-            dataType: "json",      // Expected response format
-            success: function (response) {
-                // Handle successful response
-                $("#resultDiv").text(response.message);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // Handle error
-                console.error("AJAX error:", textStatus, errorThrown);
-            }
-        });
-    });
-
-</script>

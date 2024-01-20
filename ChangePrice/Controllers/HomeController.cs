@@ -44,30 +44,6 @@ namespace ChangePrice.Controllers
             return View(listReportUserAlertsDesc);
         }
 
-
-
-        //public IActionResult Index(int id = -1)
-        //{
-        //    //_priceTracking.TrackPriceListChanges();
-        //    ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
-        //    ViewBag.UserList = _userRepository.GetAllUser();
-        //    if (id == -1)
-        //    {
-        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
-        //        return View(listReportUserAlerts);
-        //    }
-        //    else
-        //    {
-        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(id);
-        //        return View(listReportUserAlerts);
-        //    }
-
-        //}
-
-
-
-
-
         public IActionResult Add()
         {
             return View();
@@ -140,7 +116,7 @@ namespace ChangePrice.Controllers
                 _logger.LogError("", e.Message);
                 return Json(new { message = "There was a problem saving in the database"});
             }
-            return Json(new { message = true });
+            return Json(new { message = "successfully" });
         }
 
 
