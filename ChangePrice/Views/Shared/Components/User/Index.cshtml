@@ -4,9 +4,7 @@
     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#UserModal">
         Add User
     </button>
-
-
-
+ 
 <!-- Modal -->
 <div class="modal fade" id="UserModal" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -77,23 +75,37 @@
 <script>
 
 
-    $("#ButtonAddUser").click(function (e) { // Target the button with the correct ID
-        e.preventDefault(); // Prevent default form submission
+    $("#ButtonAddUser").click(function (e) {
+        e.preventDefault(); 
 
-        var formData = $("#FormAddUser").serialize(); // Collect form data
+        var formData = $("#FormAddUser").serialize(); 
 
         console.log("formData")
         console.log(formData)
 
         $.ajax({
-            url: "/User/AddUserajax", // Target the correct controller action
+            url: "@(Url.Action("AddUserajax", "User"))",
             type: "POST",
             data: formData,
             dataType: "json",
+
             success: function (response) {
-                // Handle successful response
                 $("#resultAddUser").text(response.message);
+
+                console.log(response.message)
+
+                if (response.message === true) {
+
+                    console.log("in if true ")
+
+                    //$("#ButtonCloseAddAlert").click();
+
+                    $(location).attr('href', $(location).attr('href'));
+
+                }
             },
+
+
             error: function (jqXHR, textStatus, errorThrown) {
                 // Handle error
                 console.error("AJAX error:", textStatus, errorThrown);

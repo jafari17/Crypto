@@ -57,12 +57,11 @@ namespace ChangePrice.Services
                     itemReportUserAlerts.IsCrossedUp = IsCrossedUp(itemReportUserAlerts.Price.Value, candle.OpenPrice);
                     var direction = itemReportUserAlerts.IsCrossedUp.Value ? "↗" : "↘";
 
-                    EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,
-                                            lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value, touchDirection: direction, Description: itemReportUserAlerts.Description);
+                    EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value,
+                        touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
-                    var isEmailSent = _notificationEmail.Send(emailModel);
-                    //var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime" +
-                    //                                        $" {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
+                    //var isEmailSent = _notificationEmail.Send(emailModel);
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($" {itemReportUserAlerts.Price} {direction} TC: {candle.ClosePrice}  \n\n {itemReportUserAlerts.Description} ");
 
 
                     //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);  /// کامنت تا تغییر 
@@ -83,7 +82,10 @@ namespace ChangePrice.Services
 
         private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
         {
-            if (LastTouchPrice < DateTime.Now.AddMinutes(_minutesBehind))
+            var Minutes = -1 * _minutesBehind;
+            var dat = DateTime.Now.AddMinutes(Minutes);
+
+            if (LastTouchPrice <= DateTime.Now.AddMinutes(Minutes))
             {
                 return true;
             }
@@ -100,12 +102,12 @@ namespace ChangePrice.Services
             return price >= openPrice;
         }
 
-        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description)
+        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description,decimal ClosePrice)
         {
 
             string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
-            string Body = $"Touch Price {price} in datetime {lastTouchPrice} {touchDirection} \n Description: \n {Description} ";
+            string Body = $" {price} {touchDirection}  TC: {ClosePrice}\n \n {Description} ";
 
             EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
 

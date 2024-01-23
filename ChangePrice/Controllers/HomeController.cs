@@ -116,7 +116,7 @@ namespace ChangePrice.Controllers
                 _logger.LogError("", e.Message);
                 return Json(new { message = "There was a problem saving in the database"});
             }
-            return Json(new { message = "successfully" });
+            return Json(new { message = true });
         }
 
 

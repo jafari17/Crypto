@@ -116,18 +116,18 @@
         console.log(formData)
 
         $.ajax({
-            url: "/Home/AddAlertajax", 
+            url: "@(Url.Action("AddAlertajax", "Home"))",
             type: "POST",
             data: formData,
             dataType: "json",
 
 
             success: function (response) {
-                $("#resultAddAlert").text(response.message);
+                
 
                 console.log(response.message)
 
-                if (response.message === "successfully") {
+                if (response.message === true) {
 
                     console.log("in if true ")
 
@@ -135,6 +135,8 @@
 
                     $(location).attr('href', $(location).attr('href'));
 
+                }else{
+                    $("#resultAddAlert").text(response.message);
                 }
             },
 
