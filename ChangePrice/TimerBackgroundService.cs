@@ -42,7 +42,6 @@ namespace ChangePrice
                 Console.WriteLine(DateTime.Now);
             }
         }
-
         private bool CheckiActiveTime()
         {
             double tehranOffset = 3.5;
@@ -52,6 +51,7 @@ namespace ChangePrice
             if ( hour < 6)
             {
                 Console.WriteLine(" 12pm and 6am ");
+
                 return false;
             }
             else
