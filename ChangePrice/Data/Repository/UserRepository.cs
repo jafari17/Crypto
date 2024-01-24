@@ -1,5 +1,5 @@
-﻿using ChangePrice.Data.Dto;
-using ChangePrice.DataBase;
+﻿using ChangePrice.Data.DataBase;
+using ChangePrice.Data.Dto;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Xml.Linq;

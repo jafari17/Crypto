@@ -7,12 +7,12 @@
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "DataBase",
+   "OutputPath": "Data\\DataBase",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "ChangePrice",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 0,
+   "SelectedToBeGenerated": 2,
    "Tables": [
       {
          "Name": "[dbo].[Alert]",
@@ -30,7 +30,7 @@
    "UiHint": "DESKTOP-DPHFGNU.TestCryptoCreatQuery",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
-   "UseDbContextSplitting": false,
+   "UseDbContextSplitting": true,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseHierarchyId": false,

@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChangePrice.DataBase
+namespace ChangePrice.Data.DataBase
 {
     public partial class Candle
     {

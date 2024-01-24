@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChangePrice.DataBase
+namespace ChangePrice.Data.DataBase
 {
     public partial class UserName
     {
@@ -11,10 +11,12 @@ namespace ChangePrice.DataBase
         {
             Alert = new HashSet<Alert>();
         }
+
         public int UserId { get; set; }
         public string Name { get; set; }
         public string EmailAddress { get; set; }
         public bool? IsActive { get; set; }
+
         public virtual ICollection<Alert> Alert { get; set; }
     }
 }

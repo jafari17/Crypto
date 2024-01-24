@@ -6,8 +6,8 @@ using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Net;
 using ChangePrice.Data.Repository;
-using ChangePrice.DataBase;
 using ChangePrice.Data.Dto;
+using ChangePrice.Data.DataBase;
 
 namespace ChangePrice.Controllers
 {

@@ -1,6 +1,6 @@
-﻿using ChangePrice.Data.Dto;
+﻿using ChangePrice.Data.DataBase;
+using ChangePrice.Data.Dto;
 using ChangePrice.Data.Repository;
-using ChangePrice.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
 using Microsoft.AspNetCore.Mvc;

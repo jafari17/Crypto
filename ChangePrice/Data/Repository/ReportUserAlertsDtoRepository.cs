@@ -1,5 +1,5 @@
-﻿using ChangePrice.Data.Dto;
-using ChangePrice.DataBase;
+﻿using ChangePrice.Data.DataBase;
+using ChangePrice.Data.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChangePrice.Data.Repository
@@ -16,7 +16,7 @@ namespace ChangePrice.Data.Repository
         public List<ReportUserAlertsDto> GetAllReportUserAlerts()
         {
             var UserContext = _db.UserName.Include(u => u.Alert).ToList();
-
+         
             var reportUserAlertsList = new List<ReportUserAlertsDto>();
 
             foreach (var user in UserContext)
