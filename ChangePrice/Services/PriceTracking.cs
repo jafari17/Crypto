@@ -4,6 +4,7 @@ using ChangePrice.Data.Repository;
 using ChangePrice.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
+using System;
 
 namespace ChangePrice.Services
 {
@@ -61,7 +62,7 @@ namespace ChangePrice.Services
                         touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
                     //var isEmailSent = _notificationEmail.Send(emailModel);
-                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($" {itemReportUserAlerts.Price} {direction} TC: {candle.ClosePrice}  \n\n {itemReportUserAlerts.Description} ");
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($" {itemReportUserAlerts.Price} {direction} TC: {Convert.ToInt32(candle.ClosePrice)}  \n\n {itemReportUserAlerts.Description} ");
 
 
                     //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);  /// کامنت تا تغییر 
@@ -79,7 +80,9 @@ namespace ChangePrice.Services
         {
             return isEmailSent;
         }
+        
 
+        
         private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
         {
             var Minutes = -1 * _minutesBehind;
@@ -107,7 +110,7 @@ namespace ChangePrice.Services
 
             string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
-            string Body = $" {price} {touchDirection}  TC: {ClosePrice}\n \n {Description} ";
+            string Body = $" {price} {touchDirection}  TC: {Convert.ToInt32(ClosePrice)}\n \n {Description} ";
 
             EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
 

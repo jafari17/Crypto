@@ -34,10 +34,29 @@ namespace ChangePrice
         {
             using (IServiceScope scope = _scopeFactory.CreateScope())
             {
-                IPriceTracking _iPriceTracking = scope.ServiceProvider.GetRequiredService<IPriceTracking>();
-                _iPriceTracking.TrackPriceListChanges();
+                if (CheckiActiveTime())
+                {
+                    IPriceTracking _iPriceTracking = scope.ServiceProvider.GetRequiredService<IPriceTracking>();
+                    _iPriceTracking.TrackPriceListChanges();
+                }
                 Console.WriteLine(DateTime.Now);
+            }
+        }
 
+        private bool CheckiActiveTime()
+        {
+            double tehranOffset = 3.5;
+            DateTime now = DateTime.UtcNow.AddHours(tehranOffset);
+            int hour = now.Hour;
+
+            if ( hour < 6)
+            {
+                Console.WriteLine(" 12pm and 6am ");
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }
