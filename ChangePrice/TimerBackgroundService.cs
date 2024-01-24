@@ -44,7 +44,8 @@ namespace ChangePrice
         }
 
         private bool CheckiActiveTime()
-        {
+        { 
+
             double tehranOffset = 3.5;
             DateTime now = DateTime.UtcNow.AddHours(tehranOffset);
             int hour = now.Hour;
@@ -54,8 +55,10 @@ namespace ChangePrice
                 Console.WriteLine(" 12pm and 6am ");
                 return false;
             }
+
             else
             {
+
                 return true;
             }
         }
