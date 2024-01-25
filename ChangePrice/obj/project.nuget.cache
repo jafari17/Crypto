@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "k/XwbyanVTyh7xVyL6zURN6iDuZCX3SKabQJql3L/r26jOM6KNE1qhvt8f9MjM5jM2dwuDJi0LKBPG6JPqdrRw==",
+  "dgSpecHash": "VPIFT493v3MijE1Yuy4uIbfzAo7BTbBPjadJNWmaUPe3IfJM7FZ+l76EhAvONAb02cwgzckFV2Jtbj/Md5rEKg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto2bahman\\Crypto\\ChangePrice\\ChangePrice.csproj",
+  "projectFilePath": "C:\\Users\\RED\\Documents\\GitHubP\\Crypto\\ChangePrice\\ChangePrice.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\RED\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\RED\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.25\\microsoft.aspnetcore.cryptography.internal.6.0.25.nupkg.sha512",

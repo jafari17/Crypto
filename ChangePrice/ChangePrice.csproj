@@ -41,8 +41,8 @@
 
 
 	<ItemGroup>
+    <Folder Include="Data\DataBase\" />
     <Folder Include="Tools\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
 
 </Project>

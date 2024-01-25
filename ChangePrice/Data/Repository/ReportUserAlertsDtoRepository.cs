@@ -6,112 +6,122 @@ namespace ChangePrice.Data.Repository
 {
     public class ReportUserAlertsDtoRepository:IReportUserAlertsDtoRepository
     {
-        private TestCryptoCreatQueryContext _db;
+        private CryptoDbContext _db;
 
-        public ReportUserAlertsDtoRepository(TestCryptoCreatQueryContext context)
+        public ReportUserAlertsDtoRepository(CryptoDbContext context)
         {
             _db = context;
         }
 
         public List<ReportUserAlertsDto> GetAllReportUserAlerts()
         {
-            var UserContext = _db.UserName.Include(u => u.Alert).ToList();
-         
-            var reportUserAlertsList = new List<ReportUserAlertsDto>();
 
-            foreach (var user in UserContext)
-            {
+            var innerJoinResult = from u in _db.Users.ToList()   // outer sequence
+                                  join a in _db.Alert.ToList()   //inner sequence 
+                                  on u.Id equals a.UserId // key selector 
+                                  select new ReportUserAlertsDto
+                                  { // result selector 
+                                      Name = u.UserName,
+                                      EmailAddress = u.Email,
+                                      AlertId = a.AlertId,
+                                      UserId = a.UserId,
+                                      DateRegisterTime = a.DateRegisterTime,
+                                      Price = a.Price,
+                                      Description = a.Description,
+                                      LastTouchPrice = a.LastTouchPrice,
+                                      IsCrossedUp = a.IsCrossedUp,
+                                      PriceDifference = a.PriceDifference,
+                                      IsActive = a.IsActive,
+                                      IsTemproprySuspended = a.IsTemproprySuspended,
+                                  };
 
-                foreach (var alertItem in user.Alert)
-                {
-                    var reportUserAlerts = new ReportUserAlertsDto();
 
-                    reportUserAlerts.Name = user.Name;
-                    reportUserAlerts.EmailAddress = user.EmailAddress;
+            var reportAllAlertsList = innerJoinResult.ToList();
 
-                    reportUserAlerts.AlertId = alertItem.AlertId;
-                    reportUserAlerts.UserId = alertItem.UserId;
-                    reportUserAlerts.DateRegisterTime = alertItem.DateRegisterTime;
-                    reportUserAlerts.Price = alertItem.Price;
-                    reportUserAlerts.Description = alertItem.Description;
-                    reportUserAlerts.LastTouchPrice = alertItem.LastTouchPrice;
-                    reportUserAlerts.IsCrossedUp = alertItem.IsCrossedUp;
-                    reportUserAlerts.PriceDifference = alertItem.PriceDifference;
-                    reportUserAlerts.IsActive = alertItem.IsActive;
-                    reportUserAlerts.IsTemproprySuspended = alertItem.IsTemproprySuspended;
+            //var UserContext = _db.UserService.Include(u => u.Alert).ToList();
 
-                    reportUserAlertsList.Add(reportUserAlerts);
+            //var reportUserAlertsList = new List<ReportUserAlertsDto>();
 
-                }
-            }
-            return reportUserAlertsList;
+            //foreach (var user in UserContext)
+            //{
+
+            //    foreach (var alertItem in user.Alert)
+            //    {
+            //        var reportUserAlerts = new ReportUserAlertsDto();
+
+            //        reportUserAlerts.Name = user.Name;
+            //        reportUserAlerts.EmailAddress = user.EmailAddress;
+
+            //        reportUserAlerts.AlertId = alertItem.AlertId;
+            //        reportUserAlerts.UserId = alertItem.UserId;
+            //        reportUserAlerts.DateRegisterTime = alertItem.DateRegisterTime;
+            //        reportUserAlerts.Price = alertItem.Price;
+            //        reportUserAlerts.Description = alertItem.Description;
+            //        reportUserAlerts.LastTouchPrice = alertItem.LastTouchPrice;
+            //        reportUserAlerts.IsCrossedUp = alertItem.IsCrossedUp;
+            //        reportUserAlerts.PriceDifference = alertItem.PriceDifference;
+            //        reportUserAlerts.IsActive = alertItem.IsActive;
+            //        reportUserAlerts.IsTemproprySuspended = alertItem.IsTemproprySuspended;
+
+            //        reportUserAlertsList.Add(reportUserAlerts);
+
+            //    }
+            //}
+            return reportAllAlertsList;
         }
 
 
-        //public List<ReportUserAlertsDto> GetAllReportUserAlerts()
-        //{
-        //    var UserContext = _db.UserName.Include(u => u.Alert).ToList();
-
-        //    var reportUserAlertsList = new List<ReportUserAlertsDto>();
-
-
-        //    foreach (var user in UserContext)
-        //    {
-        //        var alertList = new List<AlertDto>();
-        //        foreach (var alertItem in user.Alert)
-        //        {
-        //            var alert = new AlertDto()
-        //            {
-        //                AlertId = alertItem.AlertId,
-        //                UserId = user.UserId,
-        //                DateRegisterTime = alertItem.DateRegisterTime,
-        //                Price = alertItem.Price,
-        //                Description = alertItem.Description,
-        //                LastTouchPrice = alertItem.LastTouchPrice,
-        //                IsCrossedUp = alertItem.IsCrossedUp,
-        //                PriceDifference = alertItem.PriceDifference,
-        //                IsActive = alertItem.IsActive,
-        //                IsTemproprySuspended = alertItem.IsTemproprySuspended
-        //            };
-        //            alertList.Add(alert);
-        //        }
-
-        //        var reportUserAlerts = new ReportUserAlertsDto();
-        //        reportUserAlerts.Name = user.Name;
-        //        reportUserAlerts.EmailAddress = user.EmailAddress;
-        //        reportUserAlerts.AlertlistForUser = alertList;
-
-        //    }
-        //}
-
-
-        public List<ReportUserAlertsDto> GetReportUserAlertsByUserId(int userId)
+        public List<ReportUserAlertsDto> GetReportUserAlertsByUserId(string userId)
         {
-            var UserContext = _db.UserName.Include(u => u.Alert).Where(x => x.UserId == userId).First();
+            var innerJoinResult = from u in _db.Users.ToList()   // outer sequence
+                                  join a in _db.Alert.ToList()   //inner sequence 
+                                  on u.Id equals a.UserId // key selector 
+                                  select new ReportUserAlertsDto
+                                  { // result selector 
+                                      Name = u.UserName,
+                                      EmailAddress = u.Email,
+                                      AlertId = a.AlertId,
+                                      UserId = a.UserId,
+                                      DateRegisterTime = a.DateRegisterTime,
+                                      Price = a.Price,
+                                      Description = a.Description,
+                                      LastTouchPrice = a.LastTouchPrice,
+                                      IsCrossedUp = a.IsCrossedUp,
+                                      PriceDifference = a.PriceDifference,
+                                      IsActive = a.IsActive,
+                                      IsTemproprySuspended = a.IsTemproprySuspended,
+                                  };
 
-            var reportUserAlertsList = new List<ReportUserAlertsDto>();
+
+            var reportUserAlertsList = innerJoinResult.Where(x => x.UserId == userId).ToList();
 
 
-            foreach (var alertItem in UserContext.Alert)
-            {
-                var reportUserAlerts = new ReportUserAlertsDto();
 
-                reportUserAlerts.Name = UserContext.Name;
-                reportUserAlerts.EmailAddress = UserContext.EmailAddress;
+            //var UserContext = _db.UserService.Include(u => u.Alert).Where(x => x.UserId == userId).First();
 
-                reportUserAlerts.AlertId = alertItem.AlertId;
-                reportUserAlerts.UserId = alertItem.UserId;
-                reportUserAlerts.DateRegisterTime = alertItem.DateRegisterTime;
-                reportUserAlerts.Price = alertItem.Price;
-                reportUserAlerts.Description = alertItem.Description;
-                reportUserAlerts.LastTouchPrice = alertItem.LastTouchPrice;
-                reportUserAlerts.IsCrossedUp = alertItem.IsCrossedUp;
-                reportUserAlerts.PriceDifference = alertItem.PriceDifference;
-                reportUserAlerts.IsActive = alertItem.IsActive;
-                reportUserAlerts.IsTemproprySuspended = alertItem.IsTemproprySuspended;
+            //var reportUserAlertsList = new List<ReportUserAlertsDto>();
 
-                reportUserAlertsList.Add(reportUserAlerts);
-            }
+
+            //foreach (var alertItem in UserContext.Alert)
+            //{
+            //    var reportUserAlerts = new ReportUserAlertsDto();
+
+            //    reportUserAlerts.Name = UserContext.Name;
+            //    reportUserAlerts.EmailAddress = UserContext.EmailAddress;
+
+            //    reportUserAlerts.AlertId = alertItem.AlertId;
+            //    reportUserAlerts.UserId = alertItem.UserId;
+            //    reportUserAlerts.DateRegisterTime = alertItem.DateRegisterTime;
+            //    reportUserAlerts.Price = alertItem.Price;
+            //    reportUserAlerts.Description = alertItem.Description;
+            //    reportUserAlerts.LastTouchPrice = alertItem.LastTouchPrice;
+            //    reportUserAlerts.IsCrossedUp = alertItem.IsCrossedUp;
+            //    reportUserAlerts.PriceDifference = alertItem.PriceDifference;
+            //    reportUserAlerts.IsActive = alertItem.IsActive;
+            //    reportUserAlerts.IsTemproprySuspended = alertItem.IsTemproprySuspended;
+
+            //    reportUserAlertsList.Add(reportUserAlerts);
+            //}
 
             return reportUserAlertsList;
         }

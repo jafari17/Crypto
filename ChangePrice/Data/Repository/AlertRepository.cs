@@ -6,9 +6,9 @@ namespace ChangePrice.Data.Repository
 {
     public class AlertRepository : IAlertRepository
     {
-        private TestCryptoCreatQueryContext _db;
+        private CryptoDbContext _db;
 
-        public AlertRepository(TestCryptoCreatQueryContext context)
+        public AlertRepository(CryptoDbContext context)
         {
             _db = context;
         }

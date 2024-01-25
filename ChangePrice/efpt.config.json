@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 2,
-   "ContextClassName": "TestCryptoCreatQueryContext",
+   "ContextClassName": "CryptoDbContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
@@ -12,22 +12,14 @@
    "ProjectRootNamespace": "ChangePrice",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 2,
+   "SelectedToBeGenerated": 0,
    "Tables": [
       {
          "Name": "[dbo].[Alert]",
          "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Candle]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[UserName]",
-         "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-DPHFGNU.TestCryptoCreatQuery",
+   "UiHint": "DESKTOP-DPHFGNU.IdentityTsetAlert",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": true,

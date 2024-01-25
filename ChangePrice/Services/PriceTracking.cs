@@ -10,7 +10,7 @@ namespace ChangePrice.Services
     public class PriceTracking : IPriceTracking
     {
         private IAlertRepository _alertRepository;
-        private IUserRepository _userRepository;
+        
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
@@ -23,10 +23,10 @@ namespace ChangePrice.Services
 
         //AlertSuspensionPeriod
         public PriceTracking(IAlertRepository alertRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
-                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram, IConfiguration configuration, IUserRepository userRepository, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
+                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram, IConfiguration configuration, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
         {
             _alertRepository = alertRepository;
-            _userRepository = userRepository;
+            
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
             _logger = logger;

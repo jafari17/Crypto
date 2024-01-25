@@ -56,11 +56,7 @@ namespace ChangePrice
                 return false;
             }
 
-            else
-            {
-
-                return true;
-            }
+            else { return true; }
         }
     }
 }

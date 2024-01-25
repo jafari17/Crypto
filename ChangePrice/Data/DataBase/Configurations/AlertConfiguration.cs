@@ -26,12 +26,9 @@ namespace ChangePrice.Data.DataBase.Configurations
 
             entity.Property(e => e.PriceDifference).HasColumnType("decimal(18, 0)");
 
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.User)
-                .WithMany(p => p.Alert)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Alert__UserID__08B54D69");
+            entity.Property(e => e.UserId)
+                .HasMaxLength(450)
+                .HasColumnName("UserID");
 
             OnConfigurePartial(entity);
         }

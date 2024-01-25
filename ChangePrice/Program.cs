@@ -3,6 +3,7 @@ using ChangePrice.Data.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
 using ChangePrice.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,34 +14,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScopedServices();
 
-builder.Services.AddDbContext<TestCryptoCreatQueryContext>(options =>
+builder.Services.AddDbContext<CryptoDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-<<<<<<< Updated upstream
 //#region Db Context
 
 //builder.Services.AddDbContext<TestCryptoCreatQueryContext>(options =>
 //{ options.UseSqlServer("Data Source =.;Initial Catalog=TestCryptoCreatQuery;Integrated Security=true"); });
 //#endregion
-=======
+
 
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<TestCryptoCreatQueryContext>()
+    .AddEntityFrameworkStores<CryptoDbContext>()
     .AddDefaultTokenProviders();
->>>>>>> Stashed changes
+
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Account/Login";  // Set your custom login path here
+//        options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Optional for access denied scenarios
+//        // Other cookie options as needed
+//    });
+
+//builder.Services.AddAuthorization();
 
 
 
-
-//builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
-//builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
-//builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
-//builder.Services.AddScoped<INotificationTelegram, NotificationTelegram>();
-//builder.Services.AddScoped<IPriceTracking, PriceTracking>();
-//builder.Services.AddScoped<IGenerateCandle, GenerateCandle>();
-
-//builder.Services.AddScoped<CandlestickModel, CandlestickModel>();
 
 builder.Services.AddHostedService<TimerBackgroundService>();
 

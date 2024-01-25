@@ -8,39 +8,52 @@ using System.Net;
 using ChangePrice.Data.Repository;
 using ChangePrice.Data.Dto;
 using ChangePrice.Data.DataBase;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace ChangePrice.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private IAlertRepository _alertRepository;
-        private IUserRepository _userRepository;
+        //private IUserRepository _userRepository;
         private IPriceTracking _priceTracking;
         private IExchangeProvider _exchangeProvider;
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
-        
+        private readonly UserManager<IdentityUser> _userManager;
 
 
         public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking,
-                              IExchangeProvider exchangeProvider, IUserRepository userRepository, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
+                              IExchangeProvider exchangeProvider, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _alertRepository = alertRepository;
             _priceTracking = priceTracking;
             _exchangeProvider = exchangeProvider;
-            _userRepository = userRepository;
+            //_userRepository = userRepository;
             _reportUserAlertsDtoRepository = reportUserAlertsDtoRepository;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             //_priceTracking.TrackPriceListChanges();
 
-            var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var listReportUserAlertsX = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
+            var listReportUserAlertsDescX = listReportUserAlertsX.OrderByDescending(o => o.DateRegisterTime);
+
+
+
+            var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(userId);
             var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
-            ViewBag.UserList = _userRepository.GetAllUser();
+            //ViewBag.UserList = _userRepository.GetAllUser();
             return View(listReportUserAlertsDesc);
         }
 
@@ -81,29 +94,30 @@ namespace ChangePrice.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddAlertajax(int price, int UserId, string Description)
+        public IActionResult AddAlertajax(AlertDto alertDto)
         {
 
 
-            if (price <= 0) 
+            if (alertDto.Price <= 0) 
             {
                 return Json(new { message = "Enter a price greater than zero" });
             }
-            if (UserId <= 0)
+            if (alertDto.UserId == null)
             {
                 return Json(new { message = "Select User" });
             }
 
+            //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             try
             {
                 Alert alertNew = new Alert()
                 {
                     DateRegisterTime = DateTime.Now,
-                    Price = price,
-                    Description = Description,
+                    Price = alertDto.Price,
+                    Description = alertDto.Description,
                     LastTouchPrice = DateTime.Now.AddYears(-10),
-                    UserId = UserId
+                    UserId = alertDto.UserId
                 };
 
                 _alertRepository.InsertAlert(alertNew);

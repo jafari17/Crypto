@@ -5,7 +5,7 @@ namespace ChangePrice.Data.Repository
     public interface IReportUserAlertsDtoRepository
     {
         List<ReportUserAlertsDto> GetAllReportUserAlerts();
-        List<ReportUserAlertsDto> GetReportUserAlertsByUserId(int userId);
+        List<ReportUserAlertsDto> GetReportUserAlertsByUserId(string userId);
         void Save();
 
     }
