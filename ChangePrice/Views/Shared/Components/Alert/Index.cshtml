@@ -1,4 +1,9 @@
-﻿
+﻿@{
+    var User = @ViewBag.UserList;
+}
+
+
+
 <a>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -16,50 +21,97 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form asp-controller="home" asp-action="add" method="post">
-                <div class="modal-body">
 
+
+            <form id="FormAddAlert">
+                <div class="modal-body">
                     <div class="form-group">
-                        <label for="price" class="control-label">Price </label>
-                        <input id="price" name="price" class="form-control" type="number" required />
+                        <price for="Price" class="control-label">Price</price>
+                        <input id="Price" name="Price" class="form-control" type="number" required />
                     </div>
                     <br />
 
-@*                    <div class="form-group">
-                        <label for="UserId" class="control-label">UserId</label>
-                        <input id="UserId" name="UserId" class="form-control"  required />
-                    </div>
-                    <br />*@
-
                     <div class="form-group">
-                        <label for="UserId" class="control-label">UserId</label>
+                        <label for="UserId" class="control-label">Loggin</label>
                         <select id="UserId" name="UserId" class="form-control" required>
-                            <option value="">-- Select User --</option>
-                            @{
-                                foreach (var Useritem in ViewBag.UserList)
-                                {
-                                    <option value=@(Useritem.UserId)>@(Useritem.Name)</option>
-                                }
-                            }
+                            <option value=@(User.Id)>@(User.UserName) -- @(User.Email)</option>
+
                         </select>
                     </div>
                     <br />
 
+@*
+                    <div class="form-group">
+                        <label for="UserId" class="control-label">UserId</label>
+                        <input value=@(User.Id) id="UserId" name="UserId" class="form-control" />
+                    </div>
+                    <br />
+*@
 
                     <div class="form-group">
                         <label for="Description" class="control-label">Description</label>
-                        <input id="Description" name="Description" class="form-control" />
+                        <input id="Description" name="Description" class="form-control"  />
                     </div>
 
+                    <div id="resultAddAlert" class="alert text-primary" role="alert"></div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="ButtonCloseAddAlert" type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
                         <div class="form-group">
-                            <input type="submit" value="ADD" class="btn btn-primary" />
+                            <input id="ButtonAddAlert" value="Add" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+
+
+    $("#ButtonAddAlert").click(function (e) { // Target the button with the correct ID
+        e.preventDefault(); // Prevent default form submission
+
+        var formData = $("#FormAddAlert").serialize(); // Collect form data
+
+        console.log("formData")
+        console.log(formData)
+
+        $.ajax({
+            url: "@(Url.Action("AddAlertajax", "Home"))",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+
+
+            success: function (response) {
+                
+
+                console.log(response.message)
+
+                if (response.message === true) {
+
+                    console.log("in if true ")
+
+                    //$("#ButtonCloseAddAlert").click();
+
+                    $(location).attr('href', $(location).attr('href'));
+
+                }else{
+                    $("#resultAddAlert").text(response.message);
+                }
+            },
+
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle error
+                console.error("AJAX error:", textStatus, errorThrown);
+            }
+        });
+    });
+
+</script>

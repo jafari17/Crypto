@@ -1,16 +1,16 @@
 ﻿using ChangePrice.Controllers;
 using ChangePrice.Data.Dto;
 using ChangePrice.Data.Repository;
-using ChangePrice.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
+using System;
 
 namespace ChangePrice.Services
 {
     public class PriceTracking : IPriceTracking
     {
         private IAlertRepository _alertRepository;
-        private IUserRepository _userRepository;
+        
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
         private IExchangeProvider _exchangeProvider;
         private INotificationEmail _notificationEmail;
@@ -23,10 +23,10 @@ namespace ChangePrice.Services
 
         //AlertSuspensionPeriod
         public PriceTracking(IAlertRepository alertRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
-                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram, IConfiguration configuration, IUserRepository userRepository, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
+                             ILogger<PriceTracking> logger, INotificationTelegram notificationTelegram, IConfiguration configuration, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
         {
             _alertRepository = alertRepository;
-            _userRepository = userRepository;
+            
             _exchangeProvider = exchangeProvider;
             _notificationEmail = notificationEmail;
             _logger = logger;
@@ -57,12 +57,11 @@ namespace ChangePrice.Services
                     itemReportUserAlerts.IsCrossedUp = IsCrossedUp(itemReportUserAlerts.Price.Value, candle.OpenPrice);
                     var direction = itemReportUserAlerts.IsCrossedUp.Value ? "↗" : "↘";
 
-                    EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,
-                                            lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value, touchDirection: direction, Description: itemReportUserAlerts.Description);
+                    EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value,
+                        touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
                     //var isEmailSent = _notificationEmail.Send(emailModel);
-                    //var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"Touch Price {itemAlert.price} in datetime" +
-                    //                                        $" {itemAlert.LastTouchPrice} {direction}  \n Description: \n {itemAlert.Description} ");
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($" {itemReportUserAlerts.Price} {direction} TC: {Convert.ToInt32(candle.ClosePrice)}  \n\n {itemReportUserAlerts.Description} ");
 
 
                     //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);  /// کامنت تا تغییر 
@@ -80,10 +79,15 @@ namespace ChangePrice.Services
         {
             return isEmailSent;
         }
+        
 
+        
         private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
         {
-            if (LastTouchPrice < DateTime.Now.AddMinutes(_minutesBehind))
+            var Minutes = -1 * _minutesBehind;
+            var dat = DateTime.Now.AddMinutes(Minutes);
+
+            if (LastTouchPrice <= DateTime.Now.AddMinutes(Minutes))
             {
                 return true;
             }
@@ -100,12 +104,12 @@ namespace ChangePrice.Services
             return price >= openPrice;
         }
 
-        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description)
+        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description,decimal ClosePrice)
         {
 
             string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
-            string Body = $"Touch Price {price} in datetime {lastTouchPrice} {touchDirection} \n Description: \n {Description} ";
+            string Body = $" {price} {touchDirection}  TC: {Convert.ToInt32(ClosePrice)}\n \n {Description} ";
 
             EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
 

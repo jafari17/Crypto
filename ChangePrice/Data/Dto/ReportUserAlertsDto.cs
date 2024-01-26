@@ -7,7 +7,7 @@
         //public List<AlertDto> AlertlistForUser { get; set; }
 
         public int AlertId { get; set; }
-        public int? UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime? DateRegisterTime { get; set; }
         public decimal? Price { get; set; }
         public string Description { get; set; }

@@ -1,42 +1,47 @@
 using ChangePrice;
-using ChangePrice.DataBase;
+using ChangePrice.Data.DataBase;
 using ChangePrice.Models;
 using ChangePrice.Notification;
 using ChangePrice.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScopedServices();
 
-
-#region Db Context
-
-builder.Services.AddDbContext<TestCryptoCreatQueryContext>(options =>
-{ options.UseSqlServer("Data Source =.;Initial Catalog=TestCryptoCreatQuery;Integrated Security=true"); });
-#endregion
+builder.Services.AddDbContext<CryptoDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 
 
-//builder.Services.AddScoped<IPriceRepository, PriceJsonFileRepository>();
-//builder.Services.AddScoped<IExchangeProvider, ExchangeBinanceProvider>();
-//builder.Services.AddScoped<INotificationEmail, NotificationEmail>();
-//builder.Services.AddScoped<INotificationTelegram, NotificationTelegram>();
-//builder.Services.AddScoped<IPriceTracking, PriceTracking>();
-//builder.Services.AddScoped<IGenerateCandle, GenerateCandle>();
 
-//builder.Services.AddScoped<CandlestickModel, CandlestickModel>();
+builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<CryptoDbContext>()
+    .AddDefaultTokenProviders();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
+
 
 builder.Services.AddHostedService<TimerBackgroundService>();
 
 builder.Services.AddLogging();
-
-
-
 
 
 var app = builder.Build();
@@ -51,6 +56,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -19,7 +19,6 @@ namespace ChangePrice.Notification
             _channelId = _configuration.GetValue<string>("TelegramConfig:ChannelId");
         }
 
-
         public bool SendTextMessageToChannel(string MassageTelegram)
         {
             //Console.WriteLine("https://api.telegram.org/bot{0}/sendMessage?chat_id={1}&text={2}", botToken, channelId, message);

@@ -1,5 +1,5 @@
 ﻿
-USE TestCryptoCreatQuery
+USE Crypto
 GO
 CREATE TABLE dbo.Candle(
 	CandleID INT IDENTITY(1,1) NOT NULL,

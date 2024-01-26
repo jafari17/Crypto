@@ -1,14 +1,14 @@
-﻿using ChangePrice.Data.Dto;
-using ChangePrice.DataBase;
+﻿using ChangePrice.Data.DataBase;
+using ChangePrice.Data.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChangePrice.Data.Repository
 {
     public class AlertRepository : IAlertRepository
     {
-        private TestCryptoCreatQueryContext _db;
+        private CryptoDbContext _db;
 
-        public AlertRepository(TestCryptoCreatQueryContext context)
+        public AlertRepository(CryptoDbContext context)
         {
             _db = context;
         }
@@ -16,7 +16,7 @@ namespace ChangePrice.Data.Repository
         public List<AlertDto> GetAllAlertDto()
         {
             var alertList = _db.Alert.ToList();
-
+            
             List<AlertDto> alertDtoList = new List<AlertDto>();
 
             foreach (var alertItem in alertList)

@@ -2,71 +2,57 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ChangePrice.Services;
-using System.Net.Mail;
-using System.Runtime.CompilerServices;
-using System.Net;
 using ChangePrice.Data.Repository;
-using ChangePrice.DataBase;
 using ChangePrice.Data.Dto;
+using ChangePrice.Data.DataBase;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace ChangePrice.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private IAlertRepository _alertRepository;
-        private IUserRepository _userRepository;
+        //private IUserRepository _userRepository;
         private IPriceTracking _priceTracking;
         private IExchangeProvider _exchangeProvider;
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
-        
+        private readonly UserManager<IdentityUser> _userManager;
 
 
         public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking,
-                              IExchangeProvider exchangeProvider, IUserRepository userRepository, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository)
+                              IExchangeProvider exchangeProvider, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _alertRepository = alertRepository;
             _priceTracking = priceTracking;
             _exchangeProvider = exchangeProvider;
-            _userRepository = userRepository;
+            //_userRepository = userRepository;
             _reportUserAlertsDtoRepository = reportUserAlertsDtoRepository;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             //_priceTracking.TrackPriceListChanges();
 
-            var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
-            var listReportUserAlertsDistinct = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var listReportUserAlertsX = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
+            var listReportUserAlertsDescX = listReportUserAlertsX.OrderByDescending(o => o.DateRegisterTime);
+
+
+
+            var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(userId);
+            var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
             ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
-            ViewBag.UserList = _userRepository.GetAllUser();
-            return View(listReportUserAlertsDistinct);
+            //ViewBag.UserList = _userRepository.GetAllUser();
+            return View(listReportUserAlertsDesc);
         }
-
-
-
-        //public IActionResult Index(int id = -1)
-        //{
-        //    //_priceTracking.TrackPriceListChanges();
-        //    ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
-        //    ViewBag.UserList = _userRepository.GetAllUser();
-        //    if (id == -1)
-        //    {
-        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
-        //        return View(listReportUserAlerts);
-        //    }
-        //    else
-        //    {
-        //        var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(id);
-        //        return View(listReportUserAlerts);
-        //    }
-
-        //}
-
-
-
-
 
         public IActionResult Add()
         {
@@ -103,6 +89,49 @@ namespace ChangePrice.Controllers
 
             return Redirect("/");
         }
+
+        [HttpPost]
+        public IActionResult AddAlertajax(AlertDto alertDto)
+        {
+
+
+            if (alertDto.Price <= 0) 
+            {
+                return Json(new { message = "Enter a price greater than zero" });
+            }
+            if (alertDto.UserId == null)
+            {
+                return Json(new { message = "Select User" });
+            }
+
+            //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                Alert alertNew = new Alert()
+                {
+                    DateRegisterTime = DateTime.Now,
+                    Price = alertDto.Price,
+                    Description = alertDto.Description,
+                    LastTouchPrice = DateTime.Now.AddYears(-10),
+                    UserId = alertDto.UserId
+                };
+
+                _alertRepository.InsertAlert(alertNew);
+                _alertRepository.Save();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("", e.Message);
+                _logger.LogError("", e.Message);
+                return Json(new { message = "There was a problem saving in the database"});
+            }
+            return Json(new { message = true });
+        }
+
+
+
 
         public IActionResult RemovePrice(int id)
         {
