@@ -31,10 +31,14 @@ namespace ChangePrice.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {
-
+            if(model.Email == "jafari1766666666@gmail.com")
+            {
+                ModelState.AddModelError("Email", "ایمیل تکرای است");
+            }
             
             if (!ModelState.IsValid)
-                return View();
+                return View(model);
+
 
             var result = await _userManager.CreateAsync(new IdentityUser()
             {
@@ -44,16 +48,18 @@ namespace ChangePrice.Controllers
                 EmailConfirmed = true
             }, model.Password);
 
+
+
             if (!result.Succeeded)
             {
                 foreach (var err in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, err.Description);
-                    return View();
+                    return View(model);
                 }
             }
 
-            return View("login");
+            return View(model);
         }
 
         public async Task<IActionResult> Login(string returnUrl = null)

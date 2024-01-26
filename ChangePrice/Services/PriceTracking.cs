@@ -61,7 +61,7 @@ namespace ChangePrice.Services
                         touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
                     //var isEmailSent = _notificationEmail.Send(emailModel);
-                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($" {itemReportUserAlerts.Price} {direction} TC: {Convert.ToInt32(candle.ClosePrice)}  \n\n {itemReportUserAlerts.Description} ");
+                    var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"T: {itemReportUserAlerts.Price} {direction} C: {Convert.ToInt32(candle.ClosePrice)}  \n\n {itemReportUserAlerts.Description} ");
 
 
                     //itemAlert.IsTemproprySuspended = NeedtoBeSusspended(isEmailSent);  /// کامنت تا تغییر 

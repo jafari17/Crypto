@@ -38,35 +38,6 @@ namespace ChangePrice.Data.Repository
 
             var reportAllAlertsList = innerJoinResult.ToList();
 
-            //var UserContext = _db.UserService.Include(u => u.Alert).ToList();
-
-            //var reportUserAlertsList = new List<ReportUserAlertsDto>();
-
-            //foreach (var user in UserContext)
-            //{
-
-            //    foreach (var alertItem in user.Alert)
-            //    {
-            //        var reportUserAlerts = new ReportUserAlertsDto();
-
-            //        reportUserAlerts.Name = user.Name;
-            //        reportUserAlerts.EmailAddress = user.EmailAddress;
-
-            //        reportUserAlerts.AlertId = alertItem.AlertId;
-            //        reportUserAlerts.UserId = alertItem.UserId;
-            //        reportUserAlerts.DateRegisterTime = alertItem.DateRegisterTime;
-            //        reportUserAlerts.Price = alertItem.Price;
-            //        reportUserAlerts.Description = alertItem.Description;
-            //        reportUserAlerts.LastTouchPrice = alertItem.LastTouchPrice;
-            //        reportUserAlerts.IsCrossedUp = alertItem.IsCrossedUp;
-            //        reportUserAlerts.PriceDifference = alertItem.PriceDifference;
-            //        reportUserAlerts.IsActive = alertItem.IsActive;
-            //        reportUserAlerts.IsTemproprySuspended = alertItem.IsTemproprySuspended;
-
-            //        reportUserAlertsList.Add(reportUserAlerts);
-
-            //    }
-            //}
             return reportAllAlertsList;
         }
 
