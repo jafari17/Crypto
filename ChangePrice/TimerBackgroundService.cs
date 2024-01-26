@@ -43,7 +43,8 @@ namespace ChangePrice
             }
         }
         private bool CheckiActiveTime()
-        {
+        { 
+
             double tehranOffset = 3.5;
             DateTime now = DateTime.UtcNow.AddHours(tehranOffset);
             int hour = now.Hour;
@@ -54,10 +55,8 @@ namespace ChangePrice
 
                 return false;
             }
-            else
-            {
-                return true;
-            }
+
+            else { return true; }
         }
     }
 }

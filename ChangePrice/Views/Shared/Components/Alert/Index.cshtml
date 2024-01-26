@@ -1,4 +1,9 @@
-﻿
+﻿@{
+    var User = @ViewBag.UserList;
+}
+
+
+
 <a>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -15,71 +20,33 @@
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-@*
-            <form asp-controller="home" asp-action="add" method="post">
-                <div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="price" class="control-label">Price </label>
-                        <input id="price" name="price" class="form-control" type="number" required />
-                    </div>
-                    <br />
-
-
-                    <div class="form-group">
-                        <label for="UserId" class="control-label">UserId</label>
-                        <select id="UserId" name="UserId" class="form-control" required>
-                            <option value="">-- Select User --</option>
-                            @{
-                                foreach (var Useritem in ViewBag.UserList)
-                                {
-                                    <option value=@(Useritem.UserId)>@(Useritem.Name)</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                    <br />
-
-
-                    <div class="form-group">
-                        <label for="Description" class="control-label">Description</label>
-                        <input id="Description" name="Description" class="form-control"  />
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <div class="form-group">
-                            <input type="submit" value="ADD" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            </form>
-*@
 
 
             <form id="FormAddAlert">
                 <div class="modal-body">
                     <div class="form-group">
-                        <price for="price" class="control-label">price</price>
-                        <input id="price" name="price" class="form-control" type="number" required />
+                        <price for="Price" class="control-label">Price</price>
+                        <input id="Price" name="Price" class="form-control" type="number" required />
                     </div>
                     <br />
 
                     <div class="form-group">
-                        <label for="UserId" class="control-label">UserId</label>
+                        <label for="UserId" class="control-label">Loggin</label>
                         <select id="UserId" name="UserId" class="form-control" required>
-                            <option value="">-- Select User --</option>
-                            @{
-                                foreach (var Useritem in ViewBag.UserList)
-                                {
-                                    <option value=@(Useritem.UserId)>@(Useritem.Name)</option>
-                                }
-                            }
+                            <option value=@(User.Id)>@(User.UserName) -- @(User.Email)</option>
+
                         </select>
                     </div>
                     <br />
 
+@*
+                    <div class="form-group">
+                        <label for="UserId" class="control-label">UserId</label>
+                        <input value=@(User.Id) id="UserId" name="UserId" class="form-control" />
+                    </div>
+                    <br />
+*@
 
                     <div class="form-group">
                         <label for="Description" class="control-label">Description</label>

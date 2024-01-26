@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChangePrice.DataBase
+namespace ChangePrice.Data.DataBase
 {
     public partial class Alert
     {
         public int AlertId { get; set; }
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
         public DateTime? DateRegisterTime { get; set; }
         public decimal? Price { get; set; }
         public string Description { get; set; }
@@ -17,7 +17,5 @@ namespace ChangePrice.DataBase
         public decimal? PriceDifference { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsTemproprySuspended { get; set; }
-
-        public virtual UserName User { get; set; }
     }
 }
