@@ -17,11 +17,7 @@ builder.Services.AddScopedServices();
 builder.Services.AddDbContext<CryptoDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//#region Db Context
 
-//builder.Services.AddDbContext<TestCryptoCreatQueryContext>(options =>
-//{ options.UseSqlServer("Data Source =.;Initial Catalog=TestCryptoCreatQuery;Integrated Security=true"); });
-//#endregion
 
 
 
@@ -30,25 +26,22 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddDefaultTokenProviders();
 
 
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/Account/Login";  // Set your custom login path here
-//        options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Optional for access denied scenarios
-//        // Other cookie options as needed
-//    });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-//builder.Services.AddAuthorization();
-
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
 
 
 
 builder.Services.AddHostedService<TimerBackgroundService>();
 
 builder.Services.AddLogging();
-
-
-
 
 
 var app = builder.Build();

@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ChangePrice.Services;
-using System.Net.Mail;
-using System.Runtime.CompilerServices;
-using System.Net;
 using ChangePrice.Data.Repository;
 using ChangePrice.Data.Dto;
 using ChangePrice.Data.DataBase;
