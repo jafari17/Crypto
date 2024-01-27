@@ -42,10 +42,6 @@ namespace ChangePrice.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var listReportUserAlertsX = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
-            var listReportUserAlertsDescX = listReportUserAlertsX.OrderByDescending(o => o.DateRegisterTime);
-
-
 
             var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(userId);
             var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);

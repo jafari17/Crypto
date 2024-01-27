@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenerateCandle, GenerateCandle>();
 
         services.AddScoped<CandlestickModel, CandlestickModel>();
+        
 
         return services;
     }

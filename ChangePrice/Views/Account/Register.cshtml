@@ -5,12 +5,20 @@
 
 <h1>Register</h1>
 
+
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Register" method="post">
 
-            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+
+        @{if (ViewBag.Result == true)
+            {
+                <div class="alert alert-success" role="alert">
+                 "ثبت نام با موفقیت انجام شد"
+                </div>
+            }
+        }
+        <form asp-action="Register" method="post">
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
                 <input asp-for="UserName" class="form-control" />

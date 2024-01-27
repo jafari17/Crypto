@@ -3,6 +3,7 @@ using ChangePrice.Data.DataBase;
 using ChangePrice.Data.Dto;
 using ChangePrice.Data.Repository;
 using ChangePrice.Notification;
+using ChangePrice.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +14,15 @@ namespace ChangePrice.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
+
         private readonly ILogger _logger;
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<NotificationEmail> logger)
+        public AccountController(UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager, ILogger<NotificationEmail> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            
             _logger = logger;
+            
         }
 
         public IActionResult Register()
@@ -31,14 +34,28 @@ namespace ChangePrice.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {
-            if(model.Email == "jafari1766666666@gmail.com")
-            {
-                ModelState.AddModelError("Email", "ایمیل تکرای است");
-            }
             
             if (!ModelState.IsValid)
                 return View(model);
 
+
+            var UserName = _userManager.Users.ToList().Find(a => a.UserName == model.UserName);
+
+            if (UserName != null)
+            {
+                ModelState.AddModelError("Email", "نام کاربری تکرای است");
+                return View(model);
+            }
+
+
+
+            var UserEmail = _userManager.Users.ToList().Find(a => a.Email == model.Email);
+
+            if (UserEmail != null)
+            {
+                ModelState.AddModelError("Email", "ایمیل تکرای است");
+                return View(model);
+            }
 
             var result = await _userManager.CreateAsync(new IdentityUser()
             {
@@ -48,6 +65,13 @@ namespace ChangePrice.Controllers
                 EmailConfirmed = true
             }, model.Password);
 
+            ViewBag.Result = false;
+
+            if (result.Succeeded)
+            {
+                ViewBag.Result = true;
+                return Redirect("/");
+            }
 
 
             if (!result.Succeeded)
@@ -68,6 +92,7 @@ namespace ChangePrice.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM model, string returnUrl = null)
         {

@@ -109,7 +109,7 @@ namespace ChangePrice.Services
 
             string ToAddres = emailAddress;
             string Subject = $"Touch Price {price}";
-            string Body = $" {price} {touchDirection}  TC: {Convert.ToInt32(ClosePrice)}\n \n {Description} ";
+            string Body = $"T:{price} {touchDirection} C: {Convert.ToInt32(ClosePrice)}\n\n {Description} ";
 
             EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
 
