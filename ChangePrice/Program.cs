@@ -1,9 +1,5 @@
 using ChangePrice;
 using ChangePrice.Data.DataBase;
-using ChangePrice.Models;
-using ChangePrice.Notification;
-using ChangePrice.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
