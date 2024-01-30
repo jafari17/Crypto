@@ -27,7 +27,7 @@ namespace ChangePrice.Services
 
             try
             {
-
+            https://api.woo.org/v1/public/kline?symbol=BTCUSDT&interval=15m
                 var client = new HttpClient();
                 var requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
                 var response = client.GetStringAsync(requestUri).Result;
