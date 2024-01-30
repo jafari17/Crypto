@@ -11,13 +11,13 @@ namespace ChangePrice.Models
         public int AlertId { get; set; }
         [Required]
         
-        [Column(TypeName = "nvarchar(450)")]
+        [Column(TypeName = "varchar(255)")]
         public string UserId { get; set; }
         public DateTime? DateRegisterTime { get; set; }
         [Required]
         public decimal? Price { get; set; }
         [Column(TypeName = "nvarchar(450)")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public DateTime? LastTouchPrice { get; set; }
         public bool? IsCrossedUp { get; set; }
         public decimal? PriceDifference { get; set; }
