@@ -1,5 +1,6 @@
 ﻿using ChangePrice.Data.DataBase;
 using ChangePrice.Data.Dto;
+using ChangePrice.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChangePrice.Data.Repository

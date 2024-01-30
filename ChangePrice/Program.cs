@@ -14,9 +14,6 @@ builder.Services.AddDbContext<CryptoDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-
-
-
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<CryptoDbContext>()
     .AddDefaultTokenProviders();
