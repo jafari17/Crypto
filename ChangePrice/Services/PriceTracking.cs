@@ -60,7 +60,7 @@ namespace ChangePrice.Services
                     EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value,
                         touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
-                    //var isEmailSent = _notificationEmail.Send(emailModel);
+                    var isEmailSent = _notificationEmail.Send(emailModel);
                     var isTelegramSent = _notificationTelegram.SendTextMessageToChannel($"T: {itemReportUserAlerts.Price} {direction} C: {Convert.ToInt32(candle.ClosePrice)}  \n\n {itemReportUserAlerts.Description} ");
 
 
