@@ -27,7 +27,6 @@ namespace ChangePrice.Services
 
             try
             {
-            
                 var client = new HttpClient();
                 var requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
                 var response = client.GetStringAsync(requestUri).Result;
@@ -56,7 +55,6 @@ namespace ChangePrice.Services
 
             try
             {
-
                 var client = new HttpClient();
                 var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
                 var response = client.GetStringAsync(requestUri).Result;
