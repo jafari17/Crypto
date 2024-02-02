@@ -8,26 +8,23 @@
     <h2>@ViewBag.LastPrice</h2>
     <h3 class="display-4">Alert list</h3>
 
-@*
+
+
     <div class="col-2">
-        
-        <select id="UserId" name="UserId" class="form-control">
-            <option value=-1>-- Select user alerts --</option>
-            @{
-                foreach (var Useritem in ViewBag.UserList)
-                {
+        @{
 
-                    <a asp-action="Index" asp-route-id=@(Useritem.UserId)>
-                    <option>@(Useritem.Name)</option> </a>
-
-                    //<option value=@(Useritem.UserId)>@(Useritem.Name)</option>
-                    //<option asp-action="Index" asp-route-id=@(Useritem.UserId)>@(Useritem.Name)</option>
-
-                }
+            if (ViewBag.UserHasAutoAlert == true)
+            {
+                <button><a class="nav-link text-dark" asp-controller="AlertAuto" asp-action="DeleteAlertAuto">DELETE Auto Price</a></button>
             }
-        </select>
+            else
+            {
+                <button><a class="nav-link text-dark" asp-controller="AlertAuto" asp-action="AddAlertAuto">Add Auto Price</a></button>
+            }
+        }
+
     </div>
-*@
+
 
 
     <br />
@@ -47,7 +44,6 @@
             {
                 @foreach (var item in Model)
                 {
-                    @*@if (item.UserId ==  )*@
                     <tr>
                         <td>@item.DateRegisterTime</td>
                         <td>@item.EmailAddress</td>
@@ -59,7 +55,8 @@
                             if (item.IsCrossedUp.HasValue)
                             {
                                 <td>
-                                    @item.LastTouchPrice   @{
+                                    @item.LastTouchPrice
+                                    @{
                                         if (item.IsCrossedUp.Value)
                                         {
                                             <samp>UP</samp>
@@ -75,7 +72,6 @@
                             {
                                 <td> - </td>
                             }
-
                         }
                         else
                         {
@@ -86,6 +82,7 @@
                         </td>
                     </tr>
                 }
+
             }
         </tbody>
     </table>

@@ -19,6 +19,35 @@ namespace ChangePrice.Migrations
                 .HasAnnotation("ProductVersion", "6.0.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ChangePrice.Model_DataBase.AlertAuto", b =>
+                {
+                    b.Property<int>("AlertAutoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("NotificationActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("PriceAlert")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriceSteps")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("AlertAutoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AlertAuto");
+                });
+
             modelBuilder.Entity("ChangePrice.Models.Alert", b =>
                 {
                     b.Property<int>("AlertId")
@@ -255,6 +284,17 @@ namespace ChangePrice.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ChangePrice.Model_DataBase.AlertAuto", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ChangePrice.Models.Alert", b =>

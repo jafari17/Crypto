@@ -15,6 +15,7 @@
         public bool? IsCrossedUp { get; set; }
         public decimal? PriceDifference { get; set; }
         public bool? IsActive { get; set; }
+        public bool IsAutoSet { get; set; }
         public bool? IsTemproprySuspended { get; set; }
     }
 }

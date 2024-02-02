@@ -1,4 +1,5 @@
 ﻿
+using ChangePrice.Model_DataBase;
 using ChangePrice.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace ChangePrice.Data.DataBase
         }
 
         public virtual DbSet<Alert> Alert { get; set; }
+        public virtual DbSet<AlertAuto> AlertAuto { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

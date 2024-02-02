@@ -50,7 +50,7 @@ namespace ChangePrice.Services
             throw new NotImplementedException();
         }
 
-        public string GetLastPrice()
+        public string GetLastPriceAndSymbol()
         {
             string lastPrice = "";
 
@@ -73,6 +73,25 @@ namespace ChangePrice.Services
                 Console.WriteLine($"Message :{e.Message} ");
             }
             return lastPrice;
+        }
+
+        public decimal GetLastPrice()
+        {
+            
+
+            var client = new HttpClient();
+            var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
+            var response = client.GetStringAsync(requestUri).Result;
+
+            dynamic data = JsonConvert.DeserializeObject(response);
+
+            string symbol = data.symbol;
+            string price =  data.price;
+
+            decimal lastPrice = Convert.ToDecimal(price);
+
+            return lastPrice;
+
         }
     }
 }
