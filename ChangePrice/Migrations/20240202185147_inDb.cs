@@ -6,7 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace ChangePrice.Migrations
 {
-    public partial class InDB : Migration
+    public partial class inDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
