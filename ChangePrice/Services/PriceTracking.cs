@@ -105,11 +105,11 @@ namespace ChangePrice.Services
         EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description,decimal ClosePrice)
         {
 
-            string ToAddres = emailAddress;
-            string Subject = $"Touch Price {price}";
-            string Body = $"T:{price} {touchDirection} C: {Convert.ToInt32(ClosePrice)}\n\n {Description} ";
+            string ToAddres2 = emailAddress;
+            string Subject2 = $"Touch Price {price}";
+            string Body2 = $"T:{price} {touchDirection} C: {Convert.ToInt32(ClosePrice)}\n\n {Description} ";
 
-            EmailModel emailModel = new EmailModel(ToAddres, Subject, Body) { };
+            EmailModel emailModel = new EmailModel(ToAddres2, Subject2, Body2) { };
 
             return emailModel;
         }
