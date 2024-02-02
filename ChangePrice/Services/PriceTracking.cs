@@ -9,6 +9,12 @@ namespace ChangePrice.Services
 {
     public class PriceTracking : IPriceTracking
     {
+
+
+
+
+
+
         private IAlertRepository _alertRepository;
         
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
@@ -20,6 +26,8 @@ namespace ChangePrice.Services
         private readonly IConfiguration _configuration;
 
         private readonly int _minutesBehind;
+        //-sdkofjdsojfsd
+
 
         //AlertSuspensionPeriod
         public PriceTracking(IAlertRepository alertRepository, IExchangeProvider exchangeProvider, INotificationEmail notificationEmail, 
@@ -27,6 +35,16 @@ namespace ChangePrice.Services
         {
             _alertRepository = alertRepository;
             _exchangeProvider = exchangeProvider;
+         
+            
+            
+            
+            
+            
+            
+            
+            
+            
             _notificationEmail = notificationEmail;
             _logger = logger;
             _notificationTelegram = notificationTelegram;
@@ -40,6 +58,9 @@ namespace ChangePrice.Services
         {
             List<ReportUserAlertsDto> ListReportUserAlerts = _reportUserAlertsDtoRepository.GetAllReportUserAlerts();
 
+         
+            
+            
             CandlestickModel candle = _exchangeProvider.GetLastCandle();
 
             _exchangeProvider.GetLastPrice();
@@ -55,7 +76,7 @@ namespace ChangePrice.Services
                     itemReportUserAlerts.IsCrossedUp = IsCrossedUp(itemReportUserAlerts.Price.Value, candle.OpenPrice);
                     var direction = itemReportUserAlerts.IsCrossedUp.Value ? "↗" : "↘";
 
-                    EmailModel emailModel = CreateEmailModel(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value,
+                    EmailModel emailModel = sdfdsfsdf(price: itemReportUserAlerts.Price.Value, emailAddress: itemReportUserAlerts.EmailAddress,lastTouchPrice: itemReportUserAlerts.LastTouchPrice.Value,
                         touchDirection: direction, Description: itemReportUserAlerts.Description, ClosePrice: candle.ClosePrice);
 
                     var isEmailSent = _notificationEmail.Send(emailModel);
@@ -82,10 +103,10 @@ namespace ChangePrice.Services
         
         private bool AlertSuspensionPeriod(DateTime LastTouchPrice)
         {
-            var Minutes = -1 * _minutesBehind;
-            var dat = DateTime.Now.AddMinutes(Minutes);
+            var Minutes33 = -1 * _minutesBehind;
+            var dat = DateTime.Now.AddMinutes(Minutes33);
 
-            if (LastTouchPrice <= DateTime.Now.AddMinutes(Minutes))
+            if (LastTouchPrice <= DateTime.Now.AddMinutes(Minutes33))
             {
                 return true;
             }
@@ -102,7 +123,7 @@ namespace ChangePrice.Services
             return price >= openPrice;
         }
 
-        EmailModel CreateEmailModel(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description,decimal ClosePrice)
+        EmailModel sdfdsfsdf(decimal price, string emailAddress, DateTime lastTouchPrice, string touchDirection, string Description,decimal ClosePrice)
         {
 
             string ToAddres2 = emailAddress;
