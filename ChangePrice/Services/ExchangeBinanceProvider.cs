@@ -44,8 +44,10 @@ namespace ChangePrice.Services
 
             try
             {
+
                 bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
                 bool isDevelopment2 = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT2") == "Exchange";
+
 
                 var client = new HttpClient();
                 string requestUri = $"https://api.binance.com/api/v3/klines?symbol={_tradingPair}&interval={_interval}&limit={_limit}";
@@ -83,7 +85,6 @@ namespace ChangePrice.Services
 
             try
             {
-
                 var client = new HttpClient();
                 var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
                 var response = client.GetStringAsync(requestUri).Result;
