@@ -1,6 +1,6 @@
 ﻿using ChangePrice.Data.DataBase;
 using ChangePrice.Data.Dto;
-using ChangePrice.Model_DataBase;
+using ChangePrice.ModelDataBase;
 using ChangePrice.Models;
 using Microsoft.EntityFrameworkCore;
 

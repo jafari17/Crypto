@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ChangePrice.Model_DataBase
+namespace ChangePrice.ModelDataBase
 {
     public class AlertAuto
     {

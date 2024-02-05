@@ -1,7 +1,7 @@
 ﻿using ChangePrice.Data.DataBase;
 using ChangePrice.Data.Dto;
 using ChangePrice.Models;
-
+using ChangePrice.ModelDataBase;
 namespace ChangePrice.Data.Repository
 {
     public interface IAlertRepository

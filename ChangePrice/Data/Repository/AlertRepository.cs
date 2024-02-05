@@ -2,7 +2,8 @@
 using ChangePrice.Data.Dto;
 using ChangePrice.Models;
 using Microsoft.EntityFrameworkCore;
-
+using ChangePrice.ModelDataBase;
+using ChangePrice.ModelDataBase;
 namespace ChangePrice.Data.Repository
 {
     public class AlertRepository : IAlertRepository

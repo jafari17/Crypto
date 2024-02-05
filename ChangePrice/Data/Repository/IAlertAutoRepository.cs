@@ -1,5 +1,5 @@
 ﻿using ChangePrice.Data.Dto;
-using ChangePrice.Model_DataBase;
+using ChangePrice.ModelDataBase;
 
 namespace ChangePrice.Data.Repository
 {

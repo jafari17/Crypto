@@ -6,7 +6,7 @@ namespace ChangePrice.Services
     {
         void TrackPriceAlertAuto();
 
-        void AddPriceRandNumbers( string userId);
+        void AddPriceRandNumbers( string userId, int PriceSteps);
 
         void RemovePriceRandNumbers(string userId);
     }

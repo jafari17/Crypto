@@ -1,5 +1,5 @@
 ﻿
-using ChangePrice.Model_DataBase;
+using ChangePrice.ModelDataBase;
 using ChangePrice.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +25,29 @@ namespace ChangePrice.Data.DataBase
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
-        //    modelBuilder.ApplyConfiguration(new Configurations.AlertConfiguration());
-
-        //    OnModelCreatingPartial(modelBuilder);
-        //    base.OnModelCreating(modelBuilder);
+        //    //modelBuilder.Seed();
+        //    //base.OnModelCreating(modelBuilder);
         //}
 
         //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+//public static class ModelBuilderExtensions
+//{
+//    public static void Seed(this ModelBuilder modelBuilder)
+//    {
+//        modelBuilder.Entity<Author>().HasData(
+//            new Author
+//            {
+//                AuthorId = 1,
+//                FirstName = "William",
+//                LastName = "Shakespeare"
+//            }
+//        );
+//        modelBuilder.Entity<Book>().HasData(
+//            new Book { BookId = 1, AuthorId = 1, Title = "Hamlet" },
+//            new Book { BookId = 2, AuthorId = 1, Title = "King Lear" },
+//            new Book { BookId = 3, AuthorId = 1, Title = "Othello" }
+//        );
+//    }
+//}

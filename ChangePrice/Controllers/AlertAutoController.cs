@@ -1,10 +1,11 @@
 ﻿using ChangePrice.Data.Dto;
-using ChangePrice.Model_DataBase;
+using ChangePrice.ModelDataBase;
 using ChangePrice.Models;
 using ChangePrice.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json.Nodes;
 
 namespace ChangePrice.Controllers
 {
@@ -26,18 +27,31 @@ namespace ChangePrice.Controllers
         //    return View();
         //}
 
-        //[HttpPost]
-        public IActionResult AddAlertAuto()
-        {
+      
+        //public IActionResult AddAlertAutoAjax(int selectedPriceSteps)
+        //{
 
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+        //    _alertAutoServies.AddPriceRandNumbers(userId, selectedPriceSteps);
+
+
+        //    return Redirect("/");
+        //}
+
+        [HttpPost]
+        public IActionResult AddAlertAutoAjax(int selectedPriceSteps)
+        {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            _alertAutoServies.AddPriceRandNumbers(userId, selectedPriceSteps);
 
-            _alertAutoServies.AddPriceRandNumbers(userId);
-
-
-            return Redirect("/");
+            return Json($"Alert Auto {selectedPriceSteps} submit ");
         }
+
+
+
         public IActionResult DeleteAlertAuto()
         {
 

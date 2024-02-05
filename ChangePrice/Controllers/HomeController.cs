@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Web;
-
+using ChangePrice.ModelDataBase;
 namespace ChangePrice.Controllers
 {
     [Authorize]
@@ -54,8 +54,15 @@ namespace ChangePrice.Controllers
             var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(l => l.DateRegisterTime);
             ViewBag.LastPrice = _exchangeProvider.GetLastPriceAndSymbol();
 
-
-            ViewBag.UserHasAutoAlert = _alertAutoRepository.GetAllAlertAuto().Any(AA => AA.UserId == userId);
+            if(_alertAutoRepository.GetAllAlertAuto().Any(AA => AA.UserId == userId))
+            {
+                ViewBag.UserPriceSteps = _alertAutoRepository.GetAllAlertAuto().First(AA => AA.UserId == userId).PriceSteps;
+            }
+            else
+            {
+                ViewBag.UserPriceSteps = 0;
+            }
+            
 
             //ViewBag.UserList = _userRepository.GetAllUser();
             return View(listReportUserAlertsDesc);
