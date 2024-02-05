@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChangePrice.Migrations
 {
     [DbContext(typeof(CryptoDbContext))]
-    [Migration("20240204170723_indb")]
-    partial class indb
+    [Migration("20240205113715_InDB")]
+    partial class InDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

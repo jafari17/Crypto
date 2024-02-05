@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChangePrice.Migrations
 {
-    public partial class indb : Migration
+    public partial class InDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
