@@ -42,7 +42,7 @@ namespace ChangePrice.Services
 
             CandlestickModel candle = _exchangeProvider.GetLastCandle();
 
-            _exchangeProvider.GetLastPrice();
+            _exchangeProvider.GetLastPriceAndSymbol();
 
             foreach (var itemReportUserAlerts in ListReportUserAlerts)
             {
@@ -113,5 +113,7 @@ namespace ChangePrice.Services
 
             return emailModel;
         }
+
+
     }
 }

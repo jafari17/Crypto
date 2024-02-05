@@ -38,6 +38,11 @@ namespace ChangePrice
                 {
                     IPriceTracking _iPriceTracking = scope.ServiceProvider.GetRequiredService<IPriceTracking>();
                     _iPriceTracking.TrackPriceListChanges();
+
+                    IAlertAutoServies _alertAutoServies = scope.ServiceProvider.GetRequiredService<IAlertAutoServies>();
+                    _alertAutoServies.TrackPriceAlertAuto();
+
+
                 }
                 Console.WriteLine(DateTime.Now);
             }

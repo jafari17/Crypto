@@ -7,6 +7,7 @@ namespace ChangePrice.Services
     {
         CandlestickModel GetLastCandle();
         List<CandlestickModel> GetCandlelList();
-        string GetLastPrice();
+        string GetLastPriceAndSymbol();
+        decimal GetLastPrice();
     }
 }

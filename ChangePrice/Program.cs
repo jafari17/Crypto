@@ -2,6 +2,7 @@ using ChangePrice;
 using ChangePrice.Data.DataBase;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScopedServices();
 
+//builder.Services.AddDbContext<CryptoDbContext>(options =>
+//    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDbContext<CryptoDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
@@ -58,6 +62,8 @@ builder.Services.AddLogging();
 
 var app = builder.Build();
 
+Migrate(app);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -76,3 +82,13 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+static void Migrate(WebApplication app)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<CryptoDbContext>();
+        context.Database.Migrate();
+    }
+}

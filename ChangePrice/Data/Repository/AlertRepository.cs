@@ -2,7 +2,8 @@
 using ChangePrice.Data.Dto;
 using ChangePrice.Models;
 using Microsoft.EntityFrameworkCore;
-
+using ChangePrice.ModelDataBase;
+using ChangePrice.ModelDataBase;
 namespace ChangePrice.Data.Repository
 {
     public class AlertRepository : IAlertRepository
@@ -13,28 +14,28 @@ namespace ChangePrice.Data.Repository
         {
             _db = context;
         }
-
+        
         public List<AlertDto> GetAllAlertDto()
         {
             var alertList = _db.Alert.ToList();
-            
+
             List<AlertDto> alertDtoList = new List<AlertDto>();
 
             foreach (var alertItem in alertList)
             {
                 AlertDto alertDto = new AlertDto()
                 {
-                AlertId = alertItem.AlertId,
-                UserId = alertItem.UserId,
-                DateRegisterTime = alertItem.DateRegisterTime,
-                Price = alertItem.Price,
-                Description = alertItem.Description,
-                LastTouchPrice = alertItem.LastTouchPrice,
-                IsCrossedUp = alertItem.IsCrossedUp,
-                PriceDifference = alertItem.PriceDifference,
-                IsActive = alertItem.IsActive,
-                IsTemproprySuspended = alertItem.IsTemproprySuspended
-            };
+                    AlertId = alertItem.AlertId,
+                    UserId = alertItem.UserId,
+                    DateRegisterTime = alertItem.DateRegisterTime,
+                    Price = alertItem.Price,
+                    Description = alertItem.Description,
+                    LastTouchPrice = alertItem.LastTouchPrice,
+                    IsCrossedUp = alertItem.IsCrossedUp,
+                    PriceDifference = alertItem.PriceDifference,
+                    IsActive = alertItem.IsActive,
+                    IsTemproprySuspended = alertItem.IsTemproprySuspended
+                };
                 alertDtoList.Add(alertDto);
             }
             return alertDtoList;

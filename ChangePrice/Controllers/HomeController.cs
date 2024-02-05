@@ -8,7 +8,8 @@ using ChangePrice.Data.DataBase;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-
+using Microsoft.AspNetCore.Components.Web;
+using ChangePrice.ModelDataBase;
 namespace ChangePrice.Controllers
 {
     [Authorize]
@@ -18,13 +19,15 @@ namespace ChangePrice.Controllers
         private IAlertRepository _alertRepository;
         //private IUserRepository _userRepository;
         private IPriceTracking _priceTracking;
+        private IAlertAutoRepository _alertAutoRepository;
+
         private IExchangeProvider _exchangeProvider;
         private IReportUserAlertsDtoRepository _reportUserAlertsDtoRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
 
         public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository, IPriceTracking priceTracking,
-                              IExchangeProvider exchangeProvider, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository, UserManager<IdentityUser> userManager)
+                              IExchangeProvider exchangeProvider, IReportUserAlertsDtoRepository reportUserAlertsDtoRepository, UserManager<IdentityUser> userManager,IAlertAutoRepository alertAutoRepository)
         {
             _logger = logger;
             _alertRepository = alertRepository;
@@ -33,6 +36,10 @@ namespace ChangePrice.Controllers
             //_userRepository = userRepository;
             _reportUserAlertsDtoRepository = reportUserAlertsDtoRepository;
             _userManager = userManager;
+            _alertAutoRepository = alertAutoRepository;
+
+
+
         }
 
         public IActionResult Index()
@@ -44,8 +51,19 @@ namespace ChangePrice.Controllers
 
 
             var listReportUserAlerts = _reportUserAlertsDtoRepository.GetReportUserAlertsByUserId(userId);
-            var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(o => o.DateRegisterTime);
-            ViewBag.LastPrice = _exchangeProvider.GetLastPrice();
+            var listReportUserAlertsDesc = listReportUserAlerts.OrderByDescending(l => l.DateRegisterTime);
+            ViewBag.LastPrice = _exchangeProvider.GetLastPriceAndSymbol();
+
+            if(_alertAutoRepository.GetAllAlertAuto().Any(AA => AA.UserId == userId))
+            {
+                ViewBag.UserPriceSteps = _alertAutoRepository.GetAllAlertAuto().First(AA => AA.UserId == userId).PriceSteps;
+            }
+            else
+            {
+                ViewBag.UserPriceSteps = 0;
+            }
+            
+
             //ViewBag.UserList = _userRepository.GetAllUser();
             return View(listReportUserAlertsDesc);
         }
@@ -110,7 +128,8 @@ namespace ChangePrice.Controllers
                     Price = alertDto.Price,
                     Description = alertDto.Description,
                     LastTouchPrice = DateTime.Now.AddYears(-10),
-                    UserId = alertDto.UserId
+                    UserId = alertDto.UserId,
+                    
                 };
 
                 _alertRepository.InsertAlert(alertNew);
@@ -126,16 +145,12 @@ namespace ChangePrice.Controllers
             return Json(new { message = true });
         }
 
-
-
-
         public IActionResult RemovePrice(int id)
         {
             _alertRepository.DeleteAlertById(id);
             _alertRepository.Save();
             return Redirect("/");
         }
-
 
 
         public IActionResult Privacy()
